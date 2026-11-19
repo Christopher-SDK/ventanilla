@@ -1,0 +1,8 @@
+{
+  "nota": "Clientes 100 % ficticios para pruebas. Los DNI empiezan con 0000 a propósito y no existen.",
+  "clientes": [
+    {"id": "c-ana", "nombre": "Ana Quispe Rojas", "dni": "00001234", "token_demo": "demo-ana", "cuentas": [{"tipo": "Ahorros", "numero": "191-0000001-0-11", "saldo_centimos": 254075}]},
+    {"id": "c-luis", "nombre": "Luis Huamán Torres", "dni": "00005678", "token_demo": "demo-luis", "cuentas": [{"tipo": "Sueldo", "numero": "191-0000002-0-22", "saldo_centimos": 1830000}]},
+    {"id": "c-rosa", "nombre": "Rosa Mamani Flores", "dni": "00009012", "token_demo": "demo-rosa", "cuentas": [{"tipo": "Ahorros", "numero": "191-0000003-0-33", "saldo_centimos": 48090}]}
+  ]
+}

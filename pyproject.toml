@@ -1,0 +1,56 @@
+[project]
+name = "ventanilla"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Christopher-SDK", email = "66187831+Christopher-SDK@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.165.0",
+    "httpx>=0.28.1",
+    "pydantic>=2.14.3",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.9,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "allure-pytest>=2.16.2",
+    "hypothesis>=6.170.15",
+    "import-linter>=2.17",
+    "pip-audit>=2.10.1",
+    "playwright>=1.65.2",
+    "pytest>=9.2.0",
+    "pytest-xdist>=3.8.0",
+    "schemathesis>=4.33.4",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["error::pytest.PytestUnraisableExceptionWarning"]
+
+[tool.importlinter]
+root_package = "ventanilla"
+
+[[tool.importlinter.contracts]]
+name = "Hexagonal: el dominio no conoce adaptadores, frameworks ni la red"
+type = "forbidden"
+source_modules = ["ventanilla.dominio"]
+forbidden_modules = ["ventanilla.adaptadores", "ventanilla.configuracion", "ventanilla.fallas", "ventanilla.aplicacion", "fastapi", "httpx", "starlette", "uvicorn"]
+
+[[tool.importlinter.contracts]]
+name = "Hexagonal: la aplicación usa puertos, no adaptadores"
+type = "forbidden"
+source_modules = ["ventanilla.aplicacion", "ventanilla.puertos"]
+forbidden_modules = ["ventanilla.adaptadores", "ventanilla.configuracion", "fastapi", "httpx"]
+
+[[tool.importlinter.contracts]]
+name = "Las fallas sembradas solo se cablean en la configuración"
+type = "forbidden"
+source_modules = ["ventanilla.dominio", "ventanilla.aplicacion", "ventanilla.adaptadores"]
+forbidden_modules = ["ventanilla.fallas"]

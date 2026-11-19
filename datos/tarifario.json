@@ -1,0 +1,118 @@
+{
+  "banco": "Banco Cuadre (ficticio)",
+  "vigencia": "2026-11-01",
+  "nota": "Datos 100 % ficticios para pruebas. No corresponden a ningún banco real.",
+  "partidas": [
+    {
+      "id": "mantenimiento-ahorro",
+      "concepto": "Mantenimiento de cuenta de ahorros",
+      "monto_centimos": 500,
+      "condicion": "Solo si el saldo promedio del mes es menor a S/ 1 000,00.",
+      "alias": [
+        "mantenimiento de la cuenta de ahorros",
+        "mantenimiento en la cuenta de ahorros",
+        "mantenimiento de cuenta de ahorros",
+        "mantenimiento de mi cuenta de ahorros",
+        "mantenimiento ahorros"
+      ]
+    },
+    {
+      "id": "mantenimiento-sueldo",
+      "concepto": "Mantenimiento de cuenta sueldo",
+      "monto_centimos": 0,
+      "condicion": "Sin costo.",
+      "alias": [
+        "cuenta sueldo",
+        "cuenta de sueldo"
+      ]
+    },
+    {
+      "id": "transferencia-diferida",
+      "concepto": "Transferencia interbancaria diferida (CCE)",
+      "monto_centimos": 350,
+      "condicion": "Llega el mismo día hábil si se envía antes de las 15:00.",
+      "alias": [
+        "transferencia diferida",
+        "transferencia interbancaria diferida",
+        "transferencia cce",
+        "transferir diferido",
+        "transferencia",
+        "transferir"
+      ]
+    },
+    {
+      "id": "transferencia-inmediata",
+      "concepto": "Transferencia interbancaria inmediata",
+      "monto_centimos": 700,
+      "condicion": "Llega en segundos, todos los días.",
+      "alias": [
+        "transferencia inmediata",
+        "transferencia interbancaria inmediata",
+        "transferir al instante",
+        "transferir al toque",
+        "tranferir al toque",
+        "al toque a otro banco",
+        "instant transfer",
+        "transferencia al instante",
+        "transferencia",
+        "transferir"
+      ]
+    },
+    {
+      "id": "transferencia-propia",
+      "concepto": "Transferencia entre cuentas del mismo banco",
+      "monto_centimos": 0,
+      "condicion": "Sin costo.",
+      "alias": [
+        "mismo banco",
+        "entre mis cuentas",
+        "entre cuentas propias",
+        "a mi otra cuenta",
+        "transferencia",
+        "transferir"
+      ]
+    },
+    {
+      "id": "retiro-otro-banco",
+      "concepto": "Retiro en cajero de otro banco",
+      "monto_centimos": 650,
+      "condicion": "Por cada retiro.",
+      "alias": [
+        "cajero de otro banco",
+        "cajeros de otro banco",
+        "atm de otro banco",
+        "cajero q no es del banco",
+        "cajero que no es del banco",
+        "retirar en otro banco",
+        "retiro en otro banco"
+      ]
+    },
+    {
+      "id": "reposicion-tarjeta",
+      "concepto": "Reposición de tarjeta de débito",
+      "monto_centimos": 1500,
+      "condicion": "Gratis si la tarjeta fue reportada como robada con denuncia policial.",
+      "alias": [
+        "reponer mi tarjeta",
+        "reponer la tarjeta",
+        "reposicion de tarjeta",
+        "reposicion de la tarjeta",
+        "nueva tarjeta de debito",
+        "duplicado de tarjeta",
+        "reposicion"
+      ]
+    },
+    {
+      "id": "estado-cuenta-fisico",
+      "concepto": "Estado de cuenta físico",
+      "monto_centimos": 400,
+      "condicion": "El estado de cuenta digital es gratis.",
+      "alias": [
+        "estado de cuenta fisico",
+        "estado de cuenta en papel",
+        "estado de cuenta impreso",
+        "estado de cuenta fisico"
+      ]
+    }
+  ]
+}
