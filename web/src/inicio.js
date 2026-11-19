@@ -202,42 +202,69 @@ let ancho = innerWidth, alto = innerHeight;
 addEventListener('resize', () => { if (Math.abs(innerWidth - ancho) > 40 || Math.abs(innerHeight - alto) > 120) { ancho = innerWidth; alto = innerHeight; armarEscena(); } });
 
 // ================================================================ FIRMA-03 · rompe una pieza
+// La falla se propaga: el papel recorre el diagrama, la pieza rota se tacha al tocarla,
+// un hilo rojo baja de ella hasta la respuesta «con la falla», que entra desde ese hilo; al final, la prueba roja.
 const interruptores = $$('.interruptor');
-const persianaBanco = $('.persiana-banco');
+const banco = $('[data-banco]');
 const diagrama = $('.diagrama');
 const piezas = $$('.pieza', diagrama);
 const papelDiagrama = $('[data-papel-diagrama]');
+const hilo = $('.hilo path', banco);
 const marcarPieza = (p) => piezas.forEach((x) => x.classList.toggle('rota', x.dataset.pieza === p));
-function recorrer(pieza) {
-  if (reducido) return;
+let animaciones = [], relojes = [];
+const pararBanco = () => { animaciones.forEach((a) => a.cancel()); relojes.forEach(clearTimeout); animaciones = []; relojes = []; hilo.style.opacity = ''; };
+const anima = (el, k, o) => { const a = el.animate(k, { fill: 'both', ...o }); animaciones.push(a); return a; };
+const luego = (ms, f) => relojes.push(setTimeout(f, ms));
+
+function propagar(panel, pieza) {
+  pararBanco();
+  marcarPieza(null);
+  papelDiagrama.classList.remove('danado');
+  if (reducido) { marcarPieza(pieza); papelDiagrama.classList.add('danado'); return; }
   const rota = piezas.find((x) => x.dataset.pieza === pieza);
-  const base = diagrama.getBoundingClientRect();
-  const fin = base.width - 12 * 2 - 46 - 20;
-  const enRota = rota ? rota.getBoundingClientRect().left - base.left + rota.offsetWidth / 2 - 12 : fin;
-  papelDiagrama.classList.remove('recorre', 'danado');
-  papelDiagrama.style.setProperty('--hasta', `${fin}px`);
-  void papelDiagrama.offsetWidth;
-  papelDiagrama.classList.add('recorre');
-  setTimeout(() => papelDiagrama.classList.add('danado'), Math.max(0, Math.min(900, (enRota / fin) * 600)));
+  const sin = $('.lado:not(.lado--rota)', panel), con = $('.lado--rota', panel), prueba = $('.prueba-roja', panel);
+  const b = banco.getBoundingClientRect(), d = diagrama.getBoundingClientRect(), r = rota.getBoundingClientRect(), c = con.getBoundingClientRect();
+  // El papel corre como en una cinta (lineal): el toque cae justo al pasar por la pieza
+  const largo = d.width - 12 * 2 - 46 - 20, viaje = 700;
+  const golpe = Math.round(Math.min(1, Math.max(0, (r.left + r.width / 2 - d.left - 12 - 23) / largo)) * viaje);
+  anima(papelDiagrama, [{ transform: 'translateX(0)' }, { transform: `translateX(${largo}px)` }], { duration: viaje, easing: 'linear' });
+  anima(sin, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' });
+  let llega = golpe + 120;
+  // En columnas el hilo baja por el borde derecho, sin cruzar texto, hasta el borde de la respuesta dañada
+  if (innerWidth > 760 && c.top > d.bottom) {
+    const x0 = r.left + r.width / 2 - b.left, y0 = r.bottom - b.top, xr = d.right - b.left - 1, y1 = c.top - b.top + 1.5;
+    hilo.setAttribute('d', `M${x0},${y0} V${d.bottom - b.top + 8} H${xr} V${y1} H${c.right - b.left}`);
+    const L = hilo.getTotalLength();
+    hilo.style.strokeDasharray = L;
+    // Se traza (480 ms), se queda mientras entra la respuesta y se recoge hacia la respuesta (320 ms)
+    anima(hilo, [
+      { strokeDashoffset: L, opacity: 1, easing: 'cubic-bezier(.65,0,.35,1)' },
+      { strokeDashoffset: 0, opacity: 1, offset: 480 / 1700 },
+      { strokeDashoffset: 0, opacity: 1, offset: 1380 / 1700, easing: 'cubic-bezier(.7,0,.84,0)' },
+      { strokeDashoffset: -L, opacity: 1 },
+    ], { duration: 1700, delay: golpe, fill: 'backwards' });
+    llega = golpe + 480;
+  }
+  luego(golpe, () => { rota.classList.add('rota'); papelDiagrama.classList.add('danado'); });
+  anima(con, [{ clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 460, delay: llega, easing: 'cubic-bezier(.16,1,.3,1)' });
+  anima(prueba, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 360, delay: llega + 380, easing: 'cubic-bezier(.16,1,.3,1)' });
 }
 marcarPieza(interruptores[0].dataset.pieza);
-let cambio = 0;
 interruptores.forEach((b) => b.addEventListener('click', () => {
   if (b.getAttribute('aria-checked') === 'true') return;
-  const mio = ++cambio;
   interruptores.forEach((x) => x.setAttribute('aria-checked', String(x === b)));
-  const mostrar = () => {
-    if (mio !== cambio) return;
-    $$('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== b.dataset.falla; });
-    marcarPieza(b.dataset.pieza);
-    // En móvil, que se vea lo que rompió: el diagrama sube a la vista si quedó abajo
-    if (innerWidth <= 760 && diagrama.getBoundingClientRect().top > innerHeight - 120) diagrama.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'start' });
-  };
-  if (reducido) { mostrar(); return; }
-  persianaBanco.classList.remove('sube'); persianaBanco.classList.add('baja');
-  setTimeout(() => { mostrar(); persianaBanco.classList.remove('baja'); persianaBanco.classList.add('sube'); setTimeout(() => recorrer(b.dataset.pieza), 300); }, 440);
+  const panel = $(`[data-panel="${b.dataset.falla}"]`);
+  $$('[data-panel]').forEach((p) => { p.hidden = p !== panel; });
+  // En móvil, que se vea lo que rompió: el diagrama sube a la vista si quedó abajo
+  if (innerWidth <= 760 && diagrama.getBoundingClientRect().top > innerHeight - 120) diagrama.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'start' });
+  propagar(panel, b.dataset.pieza);
 }));
-new IntersectionObserver(([e], o) => { if (e.isIntersecting) { recorrer(interruptores[0].dataset.pieza); o.disconnect(); } }, { threshold: 0.6 }).observe(diagrama);
+new IntersectionObserver(([e], o) => {
+  if (!e.isIntersecting) return;
+  const b = interruptores.find((x) => x.getAttribute('aria-checked') === 'true');
+  propagar($(`[data-panel="${b.dataset.falla}"]`), b.dataset.pieza);
+  o.disconnect();
+}, { threshold: 0.6 }).observe(diagrama);
 // Flechas entre interruptores (el foco se mueve; Espacio o Enter encienden)
 $('.interruptores').addEventListener('keydown', (e) => {
   const i = interruptores.indexOf(document.activeElement);

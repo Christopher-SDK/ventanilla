@@ -386,7 +386,7 @@ function inicio() {
           <p class="prueba-roja"><span class="x" aria-hidden="true">✗</span> <code>${esc(f.primera.prueba)}</code><span class="prueba-roja__resumen">${plural(f.pruebas_fallan, 'prueba falla', 'pruebas fallan')} · ${esc(f.capas.join(', '))}</span></p>
           <a class="boton boton--texto" href="${B}falla/${f.slug}/" data-viaja>Ver la falla ${f.n} <span aria-hidden="true">→</span></a>
         </article>`).join('')}
-        <div class="persiana-chica persiana-banco" aria-hidden="true">${LAMAS}</div>
+        <svg class="hilo" aria-hidden="true"><path /></svg>
       </div>
     </div>
     <div class="matriz" id="matriz">
