@@ -1,31 +1,359 @@
 {
   "descripcion": "Set dorado: la respuesta correcta de cada pregunta, escrita a mano desde el corpus. 'debe' es una lista de grupos: cada grupo exige al menos una de sus alternativas. 'no_debe' lista lo que no puede aparecer.",
   "casos": [
-    {"id": "d01", "q": "¿Cuánto cuesta una transferencia interbancaria inmediata?", "debe": [["7,00", "7.00"]], "no_debe": []},
-    {"id": "d02", "q": "¿Cuánto cuesta una transferencia interbancaria diferida?", "debe": [["3,50", "3.50"]], "no_debe": ["7,00"]},
-    {"id": "d03", "q": "¿Cobran por transferir entre mis cuentas del mismo banco?", "debe": [["sin costo", "gratis", "no tiene costo", "no cobra", "no se cobra", "0,00"]], "no_debe": ["3,50", "7,00"]},
-    {"id": "d04", "q": "¿Cuánto me cobran de mantenimiento en la cuenta de ahorros?", "debe": [["5,00", "5.00"], ["1 000", "1000", "1.000"]], "no_debe": []},
-    {"id": "d05", "q": "¿La cuenta sueldo tiene costo de mantenimiento?", "debe": [["sin costo", "gratis", "no tiene costo", "no cobra", "no se cobra"]], "no_debe": ["5,00"]},
-    {"id": "d06", "q": "¿Cuánto cuesta el estado de cuenta en papel?", "debe": [["4,00", "4.00"]], "no_debe": []},
-    {"id": "d07", "q": "¿Cuánto me cobran por retirar en un cajero de otro banco?", "debe": [["6,50", "6.50"]], "no_debe": []},
-    {"id": "d08", "q": "¿Cuánto cuesta reponer mi tarjeta de débito si me la robaron y tengo denuncia policial?", "debe": [["gratis", "sin costo", "no tiene costo", "no se cobra"]], "no_debe": []},
-    {"id": "d09", "q": "¿Cuál es la tasa del ITF?", "debe": [["0,005", "0.005"]], "no_debe": ["0,05 %", "0.05%"]},
-    {"id": "d10", "q": "¿Cuánto ITF pago si transfiero S/ 10 000?", "debe": [["0,50", "0.50"]], "no_debe": []},
-    {"id": "d11", "q": "¿Cuánto ITF pago por una transferencia de S/ 1 500?", "debe": [["0,05", "0.05"]], "no_debe": ["0,075", "0.075", "0,08"]},
-    {"id": "d12", "q": "En una transferencia, ¿quién paga el ITF?", "debe": [["envía", "envia", "quien envía", "el que envía", "remitente"]], "no_debe": []},
-    {"id": "d13", "q": "Si el banco revierte una operación por error, ¿me devuelven el ITF?", "debe": [["sí", "si,", "devuelve", "devuelven", "también"]], "no_debe": []},
-    {"id": "d14", "q": "¿El ITF es una comisión del banco?", "debe": [["impuesto", "no es una comisión", "estado"]], "no_debe": []},
-    {"id": "d15", "q": "¿En cuánto tiempo responden un reclamo?", "debe": [["15 días hábiles", "15 dias habiles"]], "no_debe": ["30 días"]},
-    {"id": "d16", "q": "¿Cómo presento un reclamo?", "debe": [["chat", "agencia", "teléfono", "libro de reclamaciones"]], "no_debe": []},
-    {"id": "d17", "q": "¿Necesito un abogado para reclamar?", "debe": [["no", "no necesitas"]], "no_debe": []},
-    {"id": "d18", "q": "No estoy de acuerdo con la respuesta a mi reclamo, ¿qué hago?", "debe": [["SBS", "Indecopi"]], "no_debe": []},
-    {"id": "d19", "q": "¿Qué son los derechos ARCO?", "debe": [["acceso"], ["rectificación", "rectificacion"]], "no_debe": []},
-    {"id": "d20", "q": "Me llamaron del banco pidiendo mi clave, ¿es normal?", "debe": [["fraude", "nunca"]], "no_debe": []},
-    {"id": "d21", "q": "¿Me pueden pedir el código que llega por SMS?", "debe": [["nunca", "no"]], "no_debe": []},
-    {"id": "d22", "q": "¿Me pueden dar información de la cuenta de mi esposa?", "debe": [["titular", "secreto bancario", "no"]], "no_debe": []},
-    {"id": "d23", "q": "¿Estoy hablando con una persona o con un robot?", "debe": [["asistente virtual", "inteligencia artificial", "IA"]], "no_debe": []},
-    {"id": "d24", "q": "¿A qué hora atienden los asesores?", "debe": [["9:00"], ["18:00"]], "no_debe": []},
-    {"id": "d25", "q": "¿Me pueden aprobar un préstamo por aquí?", "debe": [["asesor"]], "no_debe": ["aprobado"]},
-    {"id": "d26", "q": "Me robaron la tarjeta, ¿cómo la bloqueo?", "debe": [["app", "línea de emergencias", "linea de emergencias", "24 horas"]], "no_debe": []}
+    {
+      "id": "d01",
+      "q": "¿Cuánto cuesta una transferencia interbancaria inmediata?",
+      "debe": [
+        [
+          "7,00",
+          "7.00"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d02",
+      "q": "¿Cuánto cuesta una transferencia interbancaria diferida?",
+      "debe": [
+        [
+          "3,50",
+          "3.50"
+        ]
+      ],
+      "no_debe": [
+        "7,00"
+      ]
+    },
+    {
+      "id": "d03",
+      "q": "¿Cobran por transferir entre mis cuentas del mismo banco?",
+      "debe": [
+        [
+          "sin costo",
+          "gratis",
+          "no tiene costo",
+          "no cobra",
+          "no se cobra",
+          "0,00"
+        ]
+      ],
+      "no_debe": [
+        "3,50",
+        "7,00"
+      ]
+    },
+    {
+      "id": "d04",
+      "q": "¿Cuánto me cobran de mantenimiento en la cuenta de ahorros?",
+      "debe": [
+        [
+          "5,00",
+          "5.00"
+        ],
+        [
+          "1 000",
+          "1000",
+          "1.000"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d05",
+      "q": "¿La cuenta sueldo tiene costo de mantenimiento?",
+      "debe": [
+        [
+          "sin costo",
+          "gratis",
+          "no tiene costo",
+          "no cobra",
+          "no se cobra"
+        ]
+      ],
+      "no_debe": [
+        "5,00"
+      ]
+    },
+    {
+      "id": "d06",
+      "q": "¿Cuánto cuesta el estado de cuenta en papel?",
+      "debe": [
+        [
+          "4,00",
+          "4.00"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d07",
+      "q": "¿Cuánto me cobran por retirar en un cajero de otro banco?",
+      "debe": [
+        [
+          "6,50",
+          "6.50"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d08",
+      "q": "¿Cuánto cuesta reponer mi tarjeta de débito si me la robaron y tengo denuncia policial?",
+      "debe": [
+        [
+          "gratis",
+          "sin costo",
+          "no tiene costo",
+          "no se cobra"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d09",
+      "q": "¿Cuál es la tasa del ITF?",
+      "debe": [
+        [
+          "0,005",
+          "0.005"
+        ]
+      ],
+      "no_debe": [
+        "0,05 %",
+        "0.05%"
+      ]
+    },
+    {
+      "id": "d10",
+      "q": "¿Cuánto ITF pago si transfiero S/ 10 000?",
+      "debe": [
+        [
+          "0,50",
+          "0.50"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d11",
+      "q": "¿Cuánto ITF pago por una transferencia de S/ 1 500?",
+      "debe": [
+        [
+          "0,05",
+          "0.05"
+        ]
+      ],
+      "no_debe": [
+        "0,075",
+        "0.075",
+        "0,08"
+      ]
+    },
+    {
+      "id": "d12",
+      "q": "En una transferencia, ¿quién paga el ITF?",
+      "debe": [
+        [
+          "envía",
+          "envia",
+          "quien envía",
+          "el que envía",
+          "remitente"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d13",
+      "q": "Si el banco revierte una operación por error, ¿me devuelven el ITF?",
+      "debe": [
+        [
+          "sí",
+          "si,",
+          "devuelve",
+          "devuelven",
+          "también"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d14",
+      "q": "¿El ITF es una comisión del banco?",
+      "debe": [
+        [
+          "impuesto",
+          "no es una comisión",
+          "estado"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d15",
+      "q": "¿En cuánto tiempo responden un reclamo?",
+      "debe": [
+        [
+          "15 días hábiles",
+          "15 dias habiles"
+        ]
+      ],
+      "no_debe": [
+        "30 días"
+      ]
+    },
+    {
+      "id": "d16",
+      "q": "¿Cómo presento un reclamo?",
+      "debe": [
+        [
+          "chat",
+          "agencia",
+          "teléfono",
+          "libro de reclamaciones"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d17",
+      "q": "¿Necesito un abogado para reclamar?",
+      "debe": [
+        [
+          "no",
+          "no necesitas"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d18",
+      "q": "No estoy de acuerdo con la respuesta a mi reclamo, ¿qué hago?",
+      "debe": [
+        [
+          "SBS",
+          "Indecopi"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d19",
+      "q": "¿Qué son los derechos ARCO?",
+      "debe": [
+        [
+          "acceso"
+        ],
+        [
+          "rectificación",
+          "rectificacion"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d20",
+      "q": "Me llamaron del banco pidiendo mi clave, ¿es normal?",
+      "debe": [
+        [
+          "fraude",
+          "nunca"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d21",
+      "q": "¿Me pueden pedir el código que llega por SMS?",
+      "debe": [
+        [
+          "nunca",
+          "no"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d22",
+      "q": "¿Me pueden dar información de la cuenta de mi esposa?",
+      "debe": [
+        [
+          "titular",
+          "secreto bancario",
+          "no"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d23",
+      "q": "¿Estoy hablando con una persona o con un robot?",
+      "debe": [
+        [
+          "asistente virtual",
+          "inteligencia artificial",
+          "IA"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d24",
+      "q": "¿A qué hora atienden los asesores?",
+      "debe": [
+        [
+          "9:00"
+        ],
+        [
+          "18:00"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d25",
+      "q": "¿Me pueden aprobar un préstamo por aquí?",
+      "debe": [
+        [
+          "asesor"
+        ]
+      ],
+      "no_debe": [
+        "aprobado"
+      ]
+    },
+    {
+      "id": "d26",
+      "q": "Me robaron la tarjeta, ¿cómo la bloqueo?",
+      "debe": [
+        [
+          "app",
+          "línea de emergencias",
+          "linea de emergencias",
+          "24 horas"
+        ]
+      ],
+      "no_debe": []
+    },
+    {
+      "id": "d27",
+      "q": "¿Puedo presentar un reclamo por teléfono?",
+      "debe": [
+        [
+          "sí",
+          "si,",
+          "puedes"
+        ],
+        [
+          "teléfono",
+          "telefono"
+        ]
+      ],
+      "no_debe": [
+        "emergencia"
+      ],
+      "nota": "encontrado en una prueba exploratoria con el modelo en vivo: mezclaba la línea de emergencias de tarjetas"
+    }
   ]
 }

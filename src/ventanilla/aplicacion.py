@@ -51,6 +51,9 @@ class Respuesta:
 
 class Asistente:
     K = 4
+    # Fragmentos muy por debajo del mejor solo meten ruido: con «¿Puedo reclamar por teléfono?» el 4.º era el bloqueo de tarjetas
+    # y el modelo mezcló su «línea de emergencias». Con 0,25 no se pierde ninguna consulta de evals/recuperacion.json.
+    MARGEN_COSENO = 0.25
     UMBRAL_COSENO = 0.0  # se calibra con el set dorado (ver evals/calibracion)
     UMBRAL_BM25 = 0.0
 
@@ -97,7 +100,8 @@ class Asistente:
         q = self.embeddings.vectores([consulta])[0]
         cosenos = [coseno(q, v) for v in self.vectores]
         hallados = ordenar(self.bm25.puntajes(consulta), cosenos)[: self.K]
-        return [(self.fragmentos[h.indice], h.bm25, h.coseno) for h in hallados]
+        tope = max(h.coseno for h in hallados)
+        return [(self.fragmentos[h.indice], h.bm25, h.coseno) for h in hallados if h.coseno >= tope - self.MARGEN_COSENO]
 
     # --- ramas -------------------------------------------------------------------
     def _reclamo(self, mensaje: str) -> Respuesta:
