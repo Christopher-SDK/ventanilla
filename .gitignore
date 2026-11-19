@@ -12,3 +12,18 @@ __pycache__/
 /site/
 web/node_modules/
 web/dist/
+# web: páginas y datos generados (scripts/datos_web.py y web/scripts/generar.mjs los escriben)
+web/index.html
+web/404.html
+web/falla/
+web/hallazgos/
+web/datos/
+web/publico/sitemap.xml
+web/publico/robots.txt
+# web: archivos de trabajo locales (estudio, tablero, grabaciones crudas, herramientas de QA)
+web/docs/
+web/progreso/
+web/activos/
+web/qa/*
+!web/qa/spec.py
+!web/qa/pages.py

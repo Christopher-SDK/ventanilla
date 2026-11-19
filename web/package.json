@@ -1,0 +1,20 @@
+{
+  "name": "ventanilla-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generar": "node scripts/generar.mjs",
+    "dev": "npm run generar && vite --port 4911 --strictPort",
+    "build": "BASE=/ventanilla/ node scripts/generar.mjs && vite build && node scripts/generar.mjs",
+    "preview": "python3 qa/pages.py"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "gsap": "3.15.0",
+    "lenis": "1.3.27"
+  },
+  "devDependencies": {
+    "vite": "8.3.5"
+  }
+}

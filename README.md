@@ -29,7 +29,7 @@ git clone https://github.com/Christopher-SDK/ventanilla.git
 cd ventanilla
 uv sync --all-extras
 uv run playwright install chromium
-uv run pytest            # 275 pruebas, 0 fallas, ~10 s
+uv run pytest            # 282 pruebas, 0 fallas, ~10 s
 ```
 
 ### Enciende una falla y mira cómo la suite la atrapa
@@ -86,6 +86,7 @@ Abre http://localhost:8080. También puedes usar Docker: `docker compose up --bu
 | Red team | 72 casos: ataques, preguntas legítimas y set dorado contra la API | promptfoo | OWASP LLM01; ATLAS |
 | Carga | 20 usuarios: p95 ≤ 300 ms y 0 fallas (con respuestas grabadas) | Locust | — |
 | Nocturno | Modelos en vivo en Linux, verificación de digests, garak | Ollama, garak | NIST AI RMF (Measure) |
+| Página demo | La guardia del navegador decide igual que la de Python (paridad con 200 casos generados); los datos de la demo salen del sistema real con cada falla encendida | pytest, Node, Hypothesis | — |
 
 La trazabilidad completa, prueba por prueba, está en [docs/trazabilidad.md](docs/trazabilidad.md).
 
