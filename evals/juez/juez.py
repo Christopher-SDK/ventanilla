@@ -93,11 +93,26 @@ class RubricaBinaria:
         return self.score
 
 
+class AmbosJueces:
+    """Pasa solo si aprueban la fidelidad Y la rúbrica: con 47 casos, cada uno por separado aprobó alguna respuesta mala."""
+
+    def __init__(self, juez: JuezGrabado):
+        self.fidelidad = FaithfulnessMetric(model=juez, threshold=0.99, async_mode=False, include_reason=False)
+        self.rubrica, self.threshold = RubricaBinaria(juez), 0.5
+
+    def measure(self, caso: LLMTestCase):
+        f = self.fidelidad.measure(caso) >= self.fidelidad.threshold
+        r = self.rubrica.measure(caso) >= self.rubrica.threshold
+        self.score = 1.0 if f and r else 0.0
+        return self.score
+
+
 def metricas(juez: JuezGrabado) -> dict:
     return {
         "geval": lambda: metrica(juez),
         "fidelidad": lambda: FaithfulnessMetric(model=juez, threshold=0.99, async_mode=False, include_reason=False),
         "rubrica": lambda: RubricaBinaria(juez),
+        "ambos": lambda: AmbosJueces(juez),
     }
 
 
