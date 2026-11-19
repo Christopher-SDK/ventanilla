@@ -78,12 +78,12 @@ Abre http://localhost:8080. También puedes usar Docker: `docker compose up --bu
 | Privacidad | Secreto bancario entre clientes, tachado en reclamos y salidas | pytest | Ley 29733; DS 016-2024-JUS |
 | Regulación | Reclamos con código y 15 días hábiles, aviso de IA, asesor humano, crédito nunca aprobado, contrato del prompt | pytest | Res. SBS 4036-2022; DS 115-2025-PCM arts. 24, 25, 31 |
 | Modelo real | Set dorado, fuera de alcance, metamórficas, sesgo contrafactual, determinismo, inyección con el modelo real | pytest + grabaciones; intervalo de Wilson | NIST AI 600-1; ISO/IEC 25059 (robustez) |
-| Juez LLM | Calibrado contra etiquetas: κ ≥ 0,6 y cero respuestas malas aprobadas | DeepEval (fidelidad) con granite4.1 | Shankar et al. 2024; Zheng et al. 2023 |
+| Juez LLM | Calibrado con 47 etiquetas: κ ≥ 0,6 y cero respuestas malas aprobadas | DeepEval (fidelidad) + rúbrica binaria, con granite4.1 | Shankar et al. 2024; Zheng et al. 2023 |
 | API y contrato | RFC 9457, límite por IP, sesiones, SSE verificado, fuzzing del OpenAPI | pytest, Schemathesis | OWASP LLM10:2026 (consumo) |
 | Interfaz | XSS desde la salida del modelo, axe (claro/oscuro), teclado, reflow 320 px, objetivos 24 px | Playwright, axe-core | WCAG 2.2 (1.3.1, 1.4.10, 2.5.8, 4.1.3) |
 | Arquitectura | El dominio no conoce adaptadores ni la red; las fallas solo se cablean en la configuración | import-linter | — |
 | Suministro | Modelos fijados por digest y licencia; grabaciones solo de modelos fijados; pip-audit y SBOM | pytest, pip-audit | OWASP LLM04 |
-| Red team | 72 casos: ataques, preguntas legítimas y set dorado contra la API | promptfoo | OWASP LLM01; ATLAS |
+| Red team | 73 casos: ataques, preguntas legítimas y set dorado contra la API | promptfoo | OWASP LLM01; ATLAS |
 | Carga | 20 usuarios: p95 ≤ 300 ms y 0 fallas (con respuestas grabadas) | Locust | — |
 | Nocturno | Modelos en vivo en Linux, verificación de digests, garak | Ollama, garak | NIST AI RMF (Measure) |
 | Página demo | La guardia del navegador decide igual que la de Python (paridad con 200 casos generados); los datos de la demo salen del sistema real con cada falla encendida | pytest, Node, Hypothesis | — |
@@ -97,6 +97,8 @@ Esto no salió del diseño inicial: lo encontraron las propias pruebas. El detal
 - **Sesgo contrafactual.** Con «Soy Wilber, vivo en Puno y hablo quechua» o «Soy Carlos, venezolano», el modelo repetía la pregunta o se negaba a responder, aunque la búsqueda le daba los mismos documentos que a los demás. Probé tres formatos de mensaje y gané con el mensaje entre etiquetas: pasó de 16/18 a 18/18, con 0 ecos.
 - **El modelo dijo que la cuenta sueldo tiene costo** (es gratis), y lo repitió con las 5 semillas. Las tarifas pasaron a salir del tarifario estructurado y ya no del modelo.
 - **El juez G-Eval aprobaba 7 de 12 respuestas incorrectas** (κ 0,42). Medí tres opciones y elegí la que no aprueba ninguna mala: fidelidad de DeepEval, κ 0,75.
+- **En Linux el juez bajó a κ 0,583.** La misma calibración daba otro resultado en otro hardware. Amplié las etiquetas de 24 a 47 y combiné fidelidad con una rúbrica binaria: κ 0,657, sin ninguna respuesta mala aprobada. El criterio no se tocó.
+- **El modelo mandaba a la SBS a quien pedía borrar sus datos** (eso es un derecho ARCO ante el banco). Se ajustó el corte por relevancia y el caso entró al set dorado.
 - **La búsqueda híbrida rendía menos que los embeddings solos** (MRR 0,944 frente a 0,983). BM25 quedó solo como señal de abstención, y la ablación sigue en la suite.
 - **Schemathesis** encontró que la API perdía la cabecera `Allow` en los 405 y devolvía un 400 que no estaba documentado.
 - **axe** encontró `role="log"` sobre una lista ordenada.
@@ -145,7 +147,7 @@ scripts/         matriz, carga, poda de grabaciones, verificación de modelos, g
 
 - Es un modelo de 2B parámetros en CPU. Las respuestas que redacta pueden ser torpes; por eso los datos críticos no dependen de él.
 - La guardia es por reglas. Atrapa los ataques conocidos y sus variantes (tildes, mayúsculas, leetspeak, base64, caracteres invisibles), pero no reemplaza un clasificador entrenado. garak la pone a prueba cada noche.
-- El juez se calibró con 24 casos. Alcanza para descartar un mal juez, pero no para afirmar que uno es excelente.
+- El juez se calibró con 47 casos. Alcanza para descartar un mal juez, pero no para afirmar que uno es excelente.
 - El límite de mensajes y las sesiones viven en memoria: con varias réplicas, irían a Redis o al API gateway.
 
 ## Licencia

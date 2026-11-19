@@ -81,3 +81,19 @@ Schemathesis, de vez en cuando, generaba un mensaje hecho solo de espacios: vál
 ## 15. El reporte del modelo lo pisaban las corridas con fallas
 `reporte/modelo.json` lo escribía cada corrida de la suite, también las que encienden una falla. Después de la matriz, el archivo terminaba con las métricas del sistema roto, no del sano.
 **Cambio:** solo la corrida limpia escribe las métricas. Lo encontró la generación de datos de la página demo, que lee ese archivo.
+
+## 16. El juez cambiaba según la máquina, y con más casos aprobó una respuesta mala
+El job nocturno, con el modelo en vivo en Linux y sin GPU, dio κ 0,583 para el juez de fidelidad: por debajo del umbral. Con las grabaciones de la Mac daba 0,75, y en la Mac forzada a CPU, 0,667. Con 24 casos, κ se movía demasiado según el hardware como para decidir con un solo número.
+**Cambio:** no se bajó el umbral; se midió mejor. El set de calibración pasó a 47 casos (incluida una respuesta real del modelo que estaba mal, ver 17). Con el criterio fijado antes (κ ≥ 0,6 y cero respuestas malas aprobadas):
+
+| Juez (47 casos) | κ | Malas aprobadas | Buenas rechazadas |
+|---|---|---|---|
+| Fidelidad sola | 0,658 | 1 | 7 |
+| Rúbrica sola | 0,745 | 5 | 1 |
+| **Fidelidad y rúbrica a la vez** | **0,657** | **0** | 8 |
+
+Queda la combinación: una respuesta pasa solo si los dos jueces la aprueban. La prueba informa primero las respuestas malas aprobadas y deja en el reporte cuáles rechazó.
+
+## 17. «¿Cómo pido que borren mis datos?» mandaba a la SBS
+Al etiquetar a mano las respuestas reales para ampliar la calibración, el modelo respondió que para borrar los datos personales hay que reclamar ante la SBS o Indecopi. La fuente dice «en cualquier agencia o por el formulario de privacidad». La búsqueda traía el fragmento correcto primero, pero también uno de reclamos con coseno 0,316, dentro del margen de 0,25.
+**Cambio:** el margen pasó a 0,15 tras medir 0,25, 0,20 y 0,15: ninguna consulta etiquetada se pierde y el set dorado sigue completo. La pregunta entró al set dorado (d28) y la respuesta equivocada quedó como caso de calibración: el juez tiene que rechazarla.
