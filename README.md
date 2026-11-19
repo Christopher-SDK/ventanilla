@@ -22,7 +22,7 @@ mensaje ─► guardia ─► intención ─┬─ reclamo / saldo / asesor ─�
 
 ## Pruébalo en tu máquina
 
-Necesitas **Python 3.13 y [uv](https://docs.astral.sh/uv/)**. No necesitas Ollama ni GPU: las pruebas usan las respuestas grabadas del modelo.
+Necesitas **Python 3.13 y [uv](https://docs.astral.sh/uv/)**; para la paridad con la guardia del navegador y la página demo, también **Node 22**. No necesitas Ollama ni GPU: las pruebas usan las respuestas grabadas del modelo.
 
 ```bash
 git clone https://github.com/Christopher-SDK/ventanilla.git
@@ -31,6 +31,8 @@ uv sync --all-extras
 uv run playwright install chromium
 uv run pytest            # 282 pruebas, 0 fallas, ~10 s
 ```
+
+En un clon recién hecho verás `280 passed, 2 skipped`: las 2 de `tests/web/test_datos_web.py` leen el reporte que escribe `scripts/matriz.py` y se activan después de correrlo (sin Node, también se omiten las de paridad).
 
 ### Enciende una falla y mira cómo la suite la atrapa
 
@@ -52,7 +54,7 @@ uv run pytest tests/seguridad/test_verificador.py --falla TASA_INVENTADA
 
 **Que falle es la prueba de que funciona.** Sin `--falla`, todo pasa.
 
-Para ver las 7 a la vez: `uv run python scripts/matriz.py` (≈1 min).
+Para ver las 7 a la vez: `uv run python scripts/matriz.py` (≈2 min).
 
 ### Conversa con el asistente
 
@@ -74,16 +76,16 @@ Abre http://localhost:8080. También puedes usar Docker: `docker compose up --bu
 | Unitarias | Montos, ITF, datos personales, intención, días hábiles | pytest | TUO Ley 28194 art. 13; Res. SBS 4036-2022 |
 | Propiedades | Miles de entradas generadas: ITF, plazos, RRF, tachado, guardia ofuscada, verificador | Hypothesis | — |
 | Recuperación | recall@4 = 1,0 y MRR ≥ 0,9 en 30 consultas etiquetadas; ablación de BM25; umbral de abstención | pytest | ISO/IEC 25059 (corrección funcional) |
-| Seguridad | Inyección directa e indirecta, cambio de rol, citas y montos inventados, fuga del prompt, historial falso | pytest, modelo vulnerable de prueba | OWASP LLM01/02/05/07/08/09; ATLAS AML.T0051, T0054, T0056, T0070, T0071 |
+| Seguridad | Inyección directa e indirecta, cambio de rol, citas y montos inventados, fuga del prompt, historial falso | pytest, modelo vulnerable de prueba | OWASP LLM01, LLM03, LLM07, LLM08, LLM09 (edición 2026); ATLAS AML.T0051, T0054, T0056, T0070, T0071 |
 | Privacidad | Secreto bancario entre clientes, tachado en reclamos y salidas | pytest | Ley 29733; DS 016-2024-JUS |
 | Regulación | Reclamos con código y 15 días hábiles, aviso de IA, asesor humano, crédito nunca aprobado, contrato del prompt | pytest | Res. SBS 4036-2022; DS 115-2025-PCM arts. 24, 25, 31 |
 | Modelo real | Set dorado, fuera de alcance, metamórficas, sesgo contrafactual, determinismo, inyección con el modelo real | pytest + grabaciones; intervalo de Wilson | NIST AI 600-1; ISO/IEC 25059 (robustez) |
 | Juez LLM | Calibrado con 47 etiquetas: κ ≥ 0,6 y cero respuestas malas aprobadas | DeepEval (fidelidad) + rúbrica binaria, con granite4.1 | Shankar et al. 2024; Zheng et al. 2023 |
-| API y contrato | RFC 9457, límite por IP, sesiones, SSE verificado, fuzzing del OpenAPI | pytest, Schemathesis | OWASP LLM10:2026 (consumo) |
+| API y contrato | RFC 9457, límite por IP, sesiones, SSE verificado, fuzzing del OpenAPI | pytest, Schemathesis | OWASP LLM06:2026 (consumo sin límite) |
 | Interfaz | XSS desde la salida del modelo, axe (claro/oscuro), teclado, reflow 320 px, objetivos 24 px | Playwright, axe-core | WCAG 2.2 (1.3.1, 1.4.10, 2.5.8, 4.1.3) |
 | Arquitectura | El dominio no conoce adaptadores ni la red; las fallas solo se cablean en la configuración | import-linter | — |
-| Suministro | Modelos fijados por digest y licencia; grabaciones solo de modelos fijados; pip-audit y SBOM | pytest, pip-audit | OWASP LLM04 |
-| Red team | 73 casos: ataques, preguntas legítimas y set dorado contra la API | promptfoo | OWASP LLM01; ATLAS |
+| Suministro | Modelos fijados por digest y licencia; grabaciones solo de modelos fijados; pip-audit y SBOM | pytest, pip-audit | OWASP LLM04:2026 |
+| Red team | 73 casos: ataques, preguntas legítimas y set dorado contra la API | promptfoo | OWASP LLM01:2026; ATLAS |
 | Carga | 20 usuarios: p95 ≤ 300 ms y 0 fallas (con respuestas grabadas) | Locust | — |
 | Nocturno | Modelos en vivo en Linux, verificación de digests, garak | Ollama, garak | NIST AI RMF (Measure) |
 | Página demo | La guardia del navegador decide igual que la de Python (paridad con 200 casos generados); los datos de la demo salen del sistema real con cada falla encendida | pytest, Node, Hypothesis | — |
@@ -94,10 +96,10 @@ La trazabilidad completa, prueba por prueba, está en [docs/trazabilidad.md](doc
 
 Esto no salió del diseño inicial: lo encontraron las propias pruebas. El detalle está en [docs/hallazgos.md](docs/hallazgos.md).
 
-- **Sesgo contrafactual.** Con «Soy Wilber, vivo en Puno y hablo quechua» o «Soy Carlos, venezolano», el modelo repetía la pregunta o se negaba a responder, aunque la búsqueda le daba los mismos documentos que a los demás. Probé tres formatos de mensaje y gané con el mensaje entre etiquetas: pasó de 16/18 a 18/18, con 0 ecos.
+- **Sesgo contrafactual.** Con «Soy Wilber, vivo en Puno y hablo quechua» o «Soy Carlos, venezolano», el modelo repetía la pregunta o se negaba a responder, aunque la búsqueda le daba los mismos documentos que a los demás. Se probaron tres formatos de mensaje y ganó el del mensaje entre etiquetas: pasó de 16/18 a 18/18, con 0 ecos.
 - **El modelo dijo que la cuenta sueldo tiene costo** (es gratis), y lo repitió con las 5 semillas. Las tarifas pasaron a salir del tarifario estructurado y ya no del modelo.
-- **El juez G-Eval aprobaba 7 de 12 respuestas incorrectas** (κ 0,42). Medí tres opciones y elegí la que no aprueba ninguna mala: fidelidad de DeepEval, κ 0,75.
-- **En Linux el juez bajó a κ 0,583.** La misma calibración daba otro resultado en otro hardware. Amplié las etiquetas de 24 a 47 y combiné fidelidad con una rúbrica binaria: κ 0,657, sin ninguna respuesta mala aprobada. El criterio no se tocó.
+- **El juez G-Eval aprobaba 7 de 12 respuestas incorrectas** (κ 0,42). Se midieron tres opciones y quedó la que no aprueba ninguna mala: fidelidad de DeepEval, κ 0,75.
+- **En Linux el juez bajó a κ 0,583.** La misma calibración daba otro resultado en otro hardware. Las etiquetas pasaron de 24 a 47 y la fidelidad se combinó con una rúbrica binaria: κ 0,657, sin ninguna respuesta mala aprobada. El criterio no se tocó.
 - **El modelo mandaba a la SBS a quien pedía borrar sus datos** (eso es un derecho ARCO ante el banco). Se ajustó el corte por relevancia y el caso entró al set dorado.
 - **La búsqueda híbrida rendía menos que los embeddings solos** (MRR 0,944 frente a 0,983). BM25 quedó solo como señal de abstención, y la ablación sigue en la suite.
 - **Schemathesis** encontró que la API perdía la cabecera `Allow` en los 405 y devolvía un 400 que no estaba documentado.
@@ -140,7 +142,21 @@ corpus/          documentos del banco ficticio (uno externo, envenenado a propó
 evals/           set dorado, ataques, metamórficas, sesgo, fuera de alcance, juez, promptfoo, garak
 tests/           una carpeta por capa
 grabaciones/     respuestas grabadas del modelo
-scripts/         matriz, carga, poda de grabaciones, verificación de modelos, generador de promptfoo
+scripts/         matriz, carga, poda de grabaciones, verificación de modelos, generador de promptfoo, datos de la web
+datos/           tarifario, clientes ficticios y feriados (las cifras salen de aquí, no del modelo)
+carga/           escenario de Locust
+docs/            hallazgos, trazabilidad a estándares, investigación
+web/             página demo (Vite); sus datos los genera scripts/datos_web.py desde el sistema real
+```
+
+### Otras corridas locales
+
+```bash
+uv run python scripts/carga.py                 # Locust: 20 usuarios, p95 ≤ 300 ms
+uv run python scripts/generar_promptfoo.py     # casos de promptfoo desde evals/
+# con la API en marcha (VENTANILLA_POR_MINUTO=100000 uv run uvicorn ventanilla.adaptadores.api:app_desde_entorno --factory --port 8765):
+cd evals/promptfoo && npx promptfoo@0.126.0 eval -c promptfooconfig.yaml --no-cache
+cd web && npm ci && npm run dev                # la página demo en local
 ```
 
 ## Límites conocidos
