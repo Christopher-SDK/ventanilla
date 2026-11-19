@@ -10,7 +10,7 @@ HOY = date(2026, 11, 18)  # fecha fija: los plazos de reclamo no dependen del d�
 CAPAS = {
     "unitarias": "Unitarias", "propiedades": "Propiedades", "recuperacion": "Recuperación", "seguridad": "Seguridad",
     "privacidad": "Privacidad", "regulacion": "Regulación", "modelo": "Modelo real (grabado)", "api": "API y contrato",
-    "ui": "Interfaz y accesibilidad", "arquitectura": "Arquitectura", "suministro": "Cadena de suministro",
+    "ui": "Interfaz y accesibilidad", "arquitectura": "Arquitectura", "suministro": "Cadena de suministro", "web": "Página demo",
 }
 
 

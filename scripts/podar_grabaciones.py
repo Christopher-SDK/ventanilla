@@ -1,4 +1,4 @@
-"""Borra las grabaciones que ninguna corrida usa (suite limpia + las 7 fallas). Uso: uv run python scripts/podar_grabaciones.py"""
+"""Borra las grabaciones que ninguna corrida usa (suite limpia, las 7 fallas, promptfoo y los datos de la página demo). Uso: uv run python scripts/podar_grabaciones.py"""
 import os
 import subprocess
 import sys
@@ -15,6 +15,8 @@ with tempfile.NamedTemporaryFile("r", suffix=".txt", delete=False) as reg:
     for falla in [None, *FALLAS]:
         args = [sys.executable, "-m", "pytest", "-q", "-p", "no:cacheprovider", *(["--falla", falla] if falla else [])]
         subprocess.run(args, cwd=RAIZ, env=entorno, stdout=subprocess.DEVNULL)
+    # la página demo genera sus datos con el sistema real (scripts/datos_web.py)
+    subprocess.run([sys.executable, "scripts/datos_web.py"], cwd=RAIZ, env=entorno, stdout=subprocess.DEVNULL, check=True)
     # promptfoo también reproduce grabaciones a través de la API
     api = subprocess.Popen([sys.executable, "-m", "uvicorn", "ventanilla.adaptadores.api:app_desde_entorno", "--factory", "--port", "8766",
                             "--log-level", "warning"], cwd=RAIZ, env={**entorno, "VENTANILLA_POR_MINUTO": "100000"})

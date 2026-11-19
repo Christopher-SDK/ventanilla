@@ -17,7 +17,7 @@ SALIDA = RAIZ / "reporte"
 CAPAS = {
     "unitarias": "Unitarias", "propiedades": "Propiedades", "recuperacion": "Recuperación", "seguridad": "Seguridad",
     "privacidad": "Privacidad", "regulacion": "Regulación", "modelo": "Modelo real", "api": "API y contrato",
-    "ui": "Interfaz", "arquitectura": "Arquitectura", "suministro": "Suministro",
+    "ui": "Interfaz", "arquitectura": "Arquitectura", "suministro": "Suministro", "web": "Página demo",
 }
 
 
