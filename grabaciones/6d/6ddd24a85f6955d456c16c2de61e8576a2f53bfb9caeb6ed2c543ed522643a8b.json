@@ -1,0 +1,36 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Based on the given text, please generate a comprehensive list of FACTUAL, undisputed truths, that can inferred from the provided text.\nThese truths, MUST BE COHERENT. They must NOT be taken out of context.\n\nExample:\nExample Text: \n\"Albert Einstein, the genius often associated with wild hair and mind-bending theories, famously won the Nobel Prize in Physics—though not for his groundbreaking work on relativity, as many assume. Instead, in 1968, he was honored for his discovery of the photoelectric effect, a phenomenon that laid the foundation for quantum mechanics.\"\n\nExample JSON: \n{\n  \"truths\": [\n    \"Einstein won the noble prize for his discovery of the photoelectric effect in 1968.\",\n    \"The photoelectric effect is a phenomenon that laid the foundation for quantum mechanics.\"\n  ]  \n}\n===== END OF EXAMPLE ======\n**\nIMPORTANT: Please make sure to only return in JSON format, with the \"truths\" key as a list of strings. No words or explanation is needed.\nOnly include truths that are factual, BUT IT DOESN'T MATTER IF THEY ARE FACTUALLY CORRECT.\n**\n\nText:\nTarifario de comisiones. ## Transferencias\n\n- Transferencia entre cuentas del mismo banco: sin costo.\n- Transferencia interbancaria diferida (CCE): S/ 3,50. Llega el mismo día hábil si se envía antes de las 15:00.\n- Transferencia interbancaria inmediata: S/ 7,00. Llega en segundos, todos los días.\n\nJSON:"
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "truths": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Truths",
+     "type": "array"
+    }
+   },
+   "required": [
+    "truths"
+   ],
+   "title": "Truths",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"truths\": [\n    \"Transferencias entre cuentas del mismo banco tienen un costo de S/ 0,00.\",\n    \"Transferencias interbancarias diferidas (CCE) cuestan S/ 3,50.\",\n    \"Las transferencias interbancarias diferidas (CCE) llegan el mismo día hábil si se envían antes de las 15:00.\",\n    \"Las transferencias interbancarias inmediatas cuestan S/ 7,00.\",\n    \"Las transferencias interbancarias inmediatas llegan en segundos, todos los días.\"\n  ]\n}"
+}

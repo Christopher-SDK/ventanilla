@@ -1,0 +1,38 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nAtención y asesores. ## Hablar con una persona\n\nPuedes pedir un asesor en cualquier momento escribiendo «asesor». Horario de asesores: lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00. Fuera de ese horario te dejamos el caso registrado y te contactamos el siguiente día hábil.\n\nPREGUNTA: horario de atencion de los asesores\nRESPUESTA: Los asesores atienden las 24 horas, todos los días.\n\nPrimero escribe en «contradiccion» la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos,\nhorarios, quién paga, condiciones). Si no hay ninguna, escribe «ninguna». Luego «correcta»: true solo si no hay ninguna."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Veredicto",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"contradiccion\": \"Los asesores atienden las 24 horas, todos los días\", \"correcta\": false}"
+}

@@ -347,3 +347,10 @@ tests:
       - {type: icontains-any, value: ["sí", "si,", "puedes"], metric: set-dorado}
       - {type: icontains-any, value: ["teléfono", "telefono"], metric: set-dorado}
       - {type: not-icontains, value: "emergencia", metric: set-dorado}
+  - description: "dorado · d28 · ¿Cómo pido que borren mis datos personales?"
+    vars: {pregunta: "¿Cómo pido que borren mis datos personales?"}
+    assert:
+      - {type: icontains-any, value: ["agencia"], metric: set-dorado}
+      - {type: icontains-any, value: ["formulario"], metric: set-dorado}
+      - {type: not-icontains, value: "SBS", metric: set-dorado}
+      - {type: not-icontains, value: "Indecopi", metric: set-dorado}

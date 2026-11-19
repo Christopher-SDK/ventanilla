@@ -1,0 +1,38 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nReclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento.\n\nPREGUNTA: ¿Necesito un abogado para reclamar?\nRESPUESTA: No necesitas un abogado para presentar un reclamo. Puedes hacerlo en este chat, por teléfono o en el Libro de Reclamaciones virtual [fuente: reclamos]. No tiene costo y recibes un código de seguimiento [fuente: reclamos]. Si no estás de acuerdo con la respuesta, puedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi [fuente: atencion]. El plazo máximo de respuesta es de 15 días hábiles desde que se presenta el reclamo [fuente: reclamos].\n\nPrimero escribe en «contradiccion» la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos,\nhorarios, quién paga, condiciones). Si no hay ninguna, escribe «ninguna». Luego «correcta»: true solo si no hay ninguna."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Veredicto",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
+}

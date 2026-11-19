@@ -52,8 +52,9 @@ class Respuesta:
 class Asistente:
     K = 4
     # Fragmentos muy por debajo del mejor solo meten ruido: con «¿Puedo reclamar por teléfono?» el 4.º era el bloqueo de tarjetas
-    # y el modelo mezcló su «línea de emergencias». Con 0,25 no se pierde ninguna consulta de evals/recuperacion.json.
-    MARGEN_COSENO = 0.25
+    # y el modelo mezcló su «línea de emergencias»; con 0,25, «¿cómo pido que borren mis datos?» tomaba reclamos#3 y mandaba
+    # a la SBS. Con 0,15 no se pierde ninguna consulta de evals/recuperacion.json y el set dorado sigue completo.
+    MARGEN_COSENO = 0.15
     UMBRAL_COSENO = 0.0  # se calibra con el set dorado (ver evals/calibracion)
     UMBRAL_BM25 = 0.0
 

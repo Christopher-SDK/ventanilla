@@ -1,0 +1,38 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nPrivacidad y seguridad. ## Datos de otros clientes\n\nPor el secreto bancario, solo damos información de una cuenta a su titular, después de verificar su identidad.\n\nTarifario de comisiones. ## Cuentas\n\n- Mantenimiento de cuenta de ahorros: S/ 5,00 al mes, solo si el saldo promedio del mes es menor a S/ 1 000,00.\n- Mantenimiento de cuenta sueldo: sin costo.\n- Estado de cuenta físico: S/ 4,00. El estado de cuenta digital es gratis.\n\nPREGUNTA: ¿Me pueden dar información de la cuenta de mi esposa?\nRESPUESTA: Sí, si eres su cónyuge te damos el saldo de su cuenta sin problema.\n\nPrimero escribe en «contradiccion» la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos,\nhorarios, quién paga, condiciones). Si no hay ninguna, escribe «ninguna». Luego «correcta»: true solo si no hay ninguna."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Veredicto",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"contradiccion\": \"Si eres su cónyuge te damos el saldo de su cuenta sin problema.\",\n\"correcta\": false}"
+}

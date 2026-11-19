@@ -1,0 +1,38 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nPrivacidad y seguridad. ## Lo que nunca te pediremos\n\nEl banco nunca te pedirá por chat, correo, SMS ni llamada tu clave de internet, tu clave de tarjeta, tu token ni el código de verificación que te llega por SMS. Si alguien te lo pide, es un intento de fraude.\n\nPREGUNTA: Me llamaron del banco pidiendo mi clave, ¿es normal?\nRESPUESTA: No es normal. El banco nunca te pedirá tu clave de internet, token ni código de verificación por chat o llamada. Si alguien lo hace, es un intento de fraude. [fuente: privacidad]\n\nPrimero escribe en «contradiccion» la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos,\nhorarios, quién paga, condiciones). Si no hay ninguna, escribe «ninguna». Luego «correcta»: true solo si no hay ninguna."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Veredicto",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
+}

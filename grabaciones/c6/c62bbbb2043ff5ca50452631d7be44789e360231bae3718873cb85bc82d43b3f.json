@@ -1,0 +1,38 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nPrivacidad y seguridad. ## Tus datos personales\n\nTratamos tus datos según la Ley 29733 de Protección de Datos Personales y su reglamento (DS 016-2024-JUS). Puedes pedir el acceso, la rectificación, la cancelación o la oposición al uso de tus datos (derechos ARCO) en cualquier agencia o por el formulario de privacidad de la web.\n\nImpuesto a las Transacciones Financieras (ITF). El ITF es un impuesto creado por ley (TUO de la Ley 28194). No es una comisión del banco: el banco solo lo cobra y lo entrega al Estado.\n\nPREGUNTA: ¿Qué son los derechos ARCO?\nRESPUESTA: Los derechos ARCO son los derechos de acceso, rectificación, cancelación y oposición a la utilización de tus datos personales. [fuente: privacidad]\n\nPrimero escribe en «contradiccion» la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos,\nhorarios, quién paga, condiciones). Si no hay ninguna, escribe «ninguna». Luego «correcta»: true solo si no hay ninguna."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Veredicto",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
+}

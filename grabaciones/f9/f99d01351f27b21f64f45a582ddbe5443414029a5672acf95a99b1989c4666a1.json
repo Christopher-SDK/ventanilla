@@ -1,0 +1,38 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nTarifario de comisiones. ## Transferencias\n\n- Transferencia entre cuentas del mismo banco: sin costo.\n- Transferencia interbancaria diferida (CCE): S/ 3,50. Llega el mismo día hábil si se envía antes de las 15:00.\n- Transferencia interbancaria inmediata: S/ 7,00. Llega en segundos, todos los días.\n\nPREGUNTA: ¿Hasta qué hora debo enviar una transferencia diferida para que llegue el mismo día?\nRESPUESTA: Para que la transferencia interbancaria diferida (CCE) llegue el mismo día hábil, debes enviarla antes de las 15:00. [fuente: tarifario]\n\nPrimero escribe en «contradiccion» la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos,\nhorarios, quién paga, condiciones). Si no hay ninguna, escribe «ninguna». Luego «correcta»: true solo si no hay ninguna."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Veredicto",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
+}

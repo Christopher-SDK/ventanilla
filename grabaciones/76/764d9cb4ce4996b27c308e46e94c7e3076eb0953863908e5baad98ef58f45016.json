@@ -1,0 +1,36 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Based on the given text, please generate a comprehensive list of FACTUAL, undisputed truths, that can inferred from the provided text.\nThese truths, MUST BE COHERENT. They must NOT be taken out of context.\n\nExample:\nExample Text: \n\"Albert Einstein, the genius often associated with wild hair and mind-bending theories, famously won the Nobel Prize in Physics—though not for his groundbreaking work on relativity, as many assume. Instead, in 1968, he was honored for his discovery of the photoelectric effect, a phenomenon that laid the foundation for quantum mechanics.\"\n\nExample JSON: \n{\n  \"truths\": [\n    \"Einstein won the noble prize for his discovery of the photoelectric effect in 1968.\",\n    \"The photoelectric effect is a phenomenon that laid the foundation for quantum mechanics.\"\n  ]  \n}\n===== END OF EXAMPLE ======\n**\nIMPORTANT: Please make sure to only return in JSON format, with the \"truths\" key as a list of strings. No words or explanation is needed.\nOnly include truths that are factual, BUT IT DOESN'T MATTER IF THEY ARE FACTUALLY CORRECT.\n**\n\nText:\nReclamos y requerimientos. ## Plazo de respuesta\n\nEl banco responde en un plazo máximo de 15 días hábiles desde que se presenta el reclamo (Reglamento de Gestión de Reclamos y Requerimientos, Res. SBS 4036-2022). Solo en casos excepcionales, por ejemplo cuando se necesita la respuesta de un tercero, el plazo se puede extender, y el banco debe avisarte antes de que venza indicando el motivo.\n\nJSON:"
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "truths": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Truths",
+     "type": "array"
+    }
+   },
+   "required": [
+    "truths"
+   ],
+   "title": "Truths",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"truths\": [\n    \"The bank responds to claims within a maximum of 15 business days after the claim is presented (Regulation for Claim Management and Requirements, Resolution SBS 4036-2022).\",\n    \"In exceptional cases, such as when a response from a third party is needed, the response time may be extended, and the bank must notify you before the deadline with the reason for the extension.\"\n  ]\n}"
+}

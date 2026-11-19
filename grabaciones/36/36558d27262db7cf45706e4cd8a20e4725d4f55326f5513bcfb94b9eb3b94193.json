@@ -1,0 +1,38 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nReclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento.\n\nPREGUNTA: ¿Puedo presentar un reclamo por teléfono?\nRESPUESTA: Sí, puedes presentar un reclamo por teléfono. Puedes hacerlo en este chat o en el Libro de Reclamaciones virtual [fuente: reclamos]. No necesitas un abogado y no tiene costo [fuente: reclamos]. Al registrarlo recibes un código de reclamo para hacer el seguimiento [fuente: reclamos].\n\nPrimero escribe en «contradiccion» la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos,\nhorarios, quién paga, condiciones). Si no hay ninguna, escribe «ninguna». Luego «correcta»: true solo si no hay ninguna."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Veredicto",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
+}

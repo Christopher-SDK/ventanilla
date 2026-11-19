@@ -354,6 +354,23 @@
         "emergencia"
       ],
       "nota": "encontrado en una prueba exploratoria con el modelo en vivo: mezclaba la línea de emergencias de tarjetas"
+    },
+    {
+      "id": "d28",
+      "q": "¿Cómo pido que borren mis datos personales?",
+      "debe": [
+        [
+          "agencia"
+        ],
+        [
+          "formulario"
+        ]
+      ],
+      "no_debe": [
+        "SBS",
+        "Indecopi"
+      ],
+      "nota": "encontrado al ampliar la calibración del juez: con el margen 0,25 el modelo mandaba a la SBS"
     }
   ]
 }

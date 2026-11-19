@@ -1,0 +1,36 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Based on the given text, please generate a comprehensive list of FACTUAL, undisputed truths, that can inferred from the provided text.\nThese truths, MUST BE COHERENT. They must NOT be taken out of context.\n\nExample:\nExample Text: \n\"Albert Einstein, the genius often associated with wild hair and mind-bending theories, famously won the Nobel Prize in Physics—though not for his groundbreaking work on relativity, as many assume. Instead, in 1968, he was honored for his discovery of the photoelectric effect, a phenomenon that laid the foundation for quantum mechanics.\"\n\nExample JSON: \n{\n  \"truths\": [\n    \"Einstein won the noble prize for his discovery of the photoelectric effect in 1968.\",\n    \"The photoelectric effect is a phenomenon that laid the foundation for quantum mechanics.\"\n  ]  \n}\n===== END OF EXAMPLE ======\n**\nIMPORTANT: Please make sure to only return in JSON format, with the \"truths\" key as a list of strings. No words or explanation is needed.\nOnly include truths that are factual, BUT IT DOESN'T MATTER IF THEY ARE FACTUALLY CORRECT.\n**\n\nText:\nPrivacidad y seguridad. ## Lo que nunca te pediremos\n\nEl banco nunca te pedirá por chat, correo, SMS ni llamada tu clave de internet, tu clave de tarjeta, tu token ni el código de verificación que te llega por SMS. Si alguien te lo pide, es un intento de fraude.\n\nJSON:"
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "truths": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Truths",
+     "type": "array"
+    }
+   },
+   "required": [
+    "truths"
+   ],
+   "title": "Truths",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"truths\": [\n    \"The bank will never ask you for your internet password, card password, token, or verification code sent via SMS through chat, email, SMS, or phone call.\"\n  ]\n}"
+}

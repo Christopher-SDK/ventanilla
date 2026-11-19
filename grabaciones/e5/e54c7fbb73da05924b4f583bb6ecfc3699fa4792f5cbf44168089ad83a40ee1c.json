@@ -1,0 +1,38 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nImpuesto a las Transacciones Financieras (ITF). ## Quién lo paga\n\nEn una transferencia, el ITF lo paga quien envía el dinero. Si un monto es tan pequeño que el impuesto truncado da cero, no se cobra nada.\n\nPREGUNTA: ¿El ITF lo paga quien recibe la transferencia?\nRESPUESTA: Sí, el ITF lo paga quien recibe el dinero.\n\nPrimero escribe en «contradiccion» la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos,\nhorarios, quién paga, condiciones). Si no hay ninguna, escribe «ninguna». Luego «correcta»: true solo si no hay ninguna."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Veredicto",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"contradiccion\": \"El contexto dice que el ITF (Impuesto a las Transacciones Financieras) lo paga quien envía el dinero, no quien recibe la transferencia. Por lo tanto, la respuesta indicando que el ITF lo paga quien recibe el dinero es incorrecta.\", \"correcta\": false}"
+}

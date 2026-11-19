@@ -1,0 +1,38 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nReclamos y requerimientos. ## Plazo de respuesta\n\nEl banco responde en un plazo máximo de 15 días hábiles desde que se presenta el reclamo (Reglamento de Gestión de Reclamos y Requerimientos, Res. SBS 4036-2022). Solo en casos excepcionales, por ejemplo cuando se necesita la respuesta de un tercero, el plazo se puede extender, y el banco debe avisarte antes de que venza indicando el motivo.\n\nPREGUNTA: ¿Cuál es el plazo de respuesta de un reclamo?\nRESPUESTA: El banco tiene hasta 30 días hábiles para responder un reclamo.\n\nPrimero escribe en «contradiccion» la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos,\nhorarios, quién paga, condiciones). Si no hay ninguna, escribe «ninguna». Luego «correcta»: true solo si no hay ninguna."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Veredicto",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"contradiccion\": \"El plazo de respuesta de un reclamo según el contexto oficial es de 15 días hábiles, no 30 días hábiles como afirma la respuesta.\", \"correcta\": false}"
+}
