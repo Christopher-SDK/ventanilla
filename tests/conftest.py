@@ -20,8 +20,11 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     if f := config.getoption("--falla"):
-        os.environ["VENTANILLA_FALLA"] = f
-    Config.desde_entorno()  # una falla mal escrita detiene la corrida antes de empezar
+        os.environ["VENTANILLA_FALLA"] = f.strip().upper()
+    try:
+        Config.desde_entorno()  # una falla mal escrita detiene la corrida antes de empezar, con un mensaje corto
+    except ValueError as e:
+        raise pytest.UsageError(str(e)) from None
 
 
 def pytest_collection_modifyitems(items):
