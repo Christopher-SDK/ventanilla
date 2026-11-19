@@ -11,7 +11,7 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from ..aplicacion import Asistente, Respuesta, Turno
@@ -36,16 +36,11 @@ class TurnoEntrada(BaseModel):
 
 
 class ChatEntrada(BaseModel):
-    mensaje: str = Field(min_length=1, max_length=LARGO_MAXIMO)
+    # «Al menos un carácter visible» va en el esquema (pattern), no en un validador aparte:
+    # así el contrato OpenAPI dice lo mismo que la API hace (Schemathesis lo encontró).
+    mensaje: str = Field(min_length=1, max_length=LARGO_MAXIMO, pattern=r"\S")
     historial: list[TurnoEntrada] = Field(default_factory=list, max_length=8)
     sesion: str | None = Field(default=None, max_length=64)
-
-    @field_validator("mensaje")
-    @classmethod
-    def no_vacio(cls, v: str) -> str:
-        if not v.strip():
-            raise ValueError("el mensaje está vacío")
-        return v
 
 
 class SesionEntrada(BaseModel):

@@ -30,6 +30,6 @@ schema = schemathesis.openapi.from_asgi("/openapi.json", APP)
 
 
 @schema.parametrize()
-@settings(max_examples=60, deadline=None, suppress_health_check=list(HealthCheck))
+@settings(max_examples=60, deadline=None, derandomize=True, suppress_health_check=list(HealthCheck))  # siempre los mismos casos: una prueba que falla al azar no sirve
 def test_la_api_cumple_su_contrato(case):
     case.call_and_validate()

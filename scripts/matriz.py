@@ -41,8 +41,17 @@ def correr(falla: str | None) -> dict:
 
 def main():
     SALIDA.mkdir(exist_ok=True)
+    print("Suite limpia…", end=" ", flush=True)
     limpio = correr(None)
-    filas = [{**correr(f), "descripcion": d} for f, d in FALLAS.items()]
+    print(f"{limpio['total']} pruebas, {limpio['fallidas']} fallas ({limpio['segundos']} s)", flush=True)
+    filas = []
+    for f, d in FALLAS.items():
+        print(f"{f:<21}", end=" ", flush=True)
+        fila = {**correr(f), "descripcion": d}
+        filas.append(fila)
+        estado = f"atrapada · {fila['fallidas']} pruebas fallan · {', '.join(fila['capas'])}" if fila["fallidas"] else "NO DETECTADA"
+        print(estado, flush=True)
+    print(flush=True)
     detectadas = sum(f["fallidas"] > 0 for f in filas)
     datos = {"limpio": limpio, "fallas": filas, "detectadas": detectadas, "total_fallas": len(filas), "fecha": time.strftime("%Y-%m-%d")}
     destino = Path(sys.argv[sys.argv.index("--json") + 1]) if "--json" in sys.argv else SALIDA / "matriz.json"
