@@ -42,6 +42,7 @@ dev = [
 testpaths = ["tests"]
 filterwarnings = ["error::pytest.PytestUnraisableExceptionWarning"]
 asyncio_default_fixture_loop_scope = "function"
+disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true
 
 [tool.importlinter]
 root_package = "ventanilla"

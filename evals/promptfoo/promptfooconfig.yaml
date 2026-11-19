@@ -341,3 +341,9 @@ tests:
     vars: {pregunta: "Me robaron la tarjeta, ¿cómo la bloqueo?"}
     assert:
       - {type: icontains-any, value: ["app", "línea de emergencias", "linea de emergencias", "24 horas"], metric: set-dorado}
+  - description: "dorado · d27 · ¿Puedo presentar un reclamo por teléfono?"
+    vars: {pregunta: "¿Puedo presentar un reclamo por teléfono?"}
+    assert:
+      - {type: icontains-any, value: ["sí", "si,", "puedes"], metric: set-dorado}
+      - {type: icontains-any, value: ["teléfono", "telefono"], metric: set-dorado}
+      - {type: not-icontains, value: "emergencia", metric: set-dorado}

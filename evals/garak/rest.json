@@ -1,0 +1,22 @@
+{
+  "rest": {
+    "RestGenerator": {
+      "name": "ventanilla",
+      "uri": "http://127.0.0.1:8765/api/chat",
+      "method": "post",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "req_template_json_object": {
+        "mensaje": "$INPUT"
+      },
+      "response_json": true,
+      "response_json_field": "texto",
+      "request_timeout": 300,
+      "skip_codes": [
+        422,
+        429
+      ]
+    }
+  }
+}
