@@ -36,6 +36,7 @@ if (!reducido && matchMedia('(pointer: fine)').matches) {
 
 // ---------------------------------------------------------------- persiana entre páginas (una sola familia de transición)
 const persiana = document.querySelector('.persiana');
+const ROTULOS = JSON.parse(document.getElementById('rotulos')?.textContent || '{}');
 function subir() {
   if (!raiz.classList.contains('llegando')) return;
   raiz.classList.remove('llegando');
@@ -44,7 +45,13 @@ function subir() {
 }
 if (document.readyState === 'complete') requestAnimationFrame(subir); else addEventListener('load', () => requestAnimationFrame(subir));
 setTimeout(subir, 1200); // nunca queda tapada
-addEventListener('pageshow', (e) => { if (e.persisted) { persiana.classList.remove('cubre', 'descubre'); raiz.classList.remove('llegando'); } });
+addEventListener('pageshow', (e) => {
+  if (!e.persisted) return;
+  persiana.classList.remove('cubre', 'descubre'); raiz.classList.remove('llegando');
+  // Al volver desde la caché, el scroll suave retoma donde está la página (si no, el primer giro de rueda salta)
+  lenis?.scrollTo(scrollY, { immediate: true, force: true });
+  ScrollTrigger.refresh();
+});
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href]');
   if (!a || reducido || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target) return;
@@ -57,9 +64,19 @@ document.addEventListener('click', (e) => {
   }
   e.preventDefault();
   try { sessionStorage.setItem('ventanilla-persiana', '1'); } catch { /* sin almacenamiento: llega sin persiana */ }
+  // El rótulo de la persiana ya dice adónde vas (no cambia en seco bajo la persiana cerrada)
+  const base = new URL(document.querySelector('.marca').href).pathname;
+  const destino = url.pathname.startsWith(base) ? url.pathname.slice(base.length) : '';
+  persiana.querySelector('.persiana__rotulo').textContent = ROTULOS[destino] ?? 'Ventanilla';
   persiana.classList.add('cubre');
   setTimeout(() => { location.href = url.href; }, 470);
 });
+
+// ---------------------------------------------------------------- menú en móvil: se cierra al elegir o con Escape
+const menu = document.querySelector('.menu-movil');
+menu?.addEventListener('click', (e) => { if (e.target.closest('a')) menu.open = false; });
+document.addEventListener('pointerdown', (e) => { if (menu?.open && !menu.contains(e.target)) menu.open = false; });
+addEventListener('keydown', (e) => { if (e.key === 'Escape' && menu?.open) { menu.open = false; menu.querySelector('summary').focus(); } });
 
 // ---------------------------------------------------------------- entradas al ver
 export function observar(selector, alVer, margen = '0px 0px -8% 0px') {
@@ -70,7 +87,7 @@ export function observar(selector, alVer, margen = '0px 0px -8% 0px') {
   }, { rootMargin: margen });
   piezas.forEach((p) => io.observe(p));
 }
-document.querySelectorAll('main .t2, main .t3, .entrada, .tarjeta, .lista-capas li, .video, .paso-guia, .hallazgo, .ficha__bajada, .comparar, .prueba-roja').forEach((el, i, todos) => {
+document.querySelectorAll('main .t2, main .t3, .entrada, .tarjeta, .registro li, .video, .paso-guia, .hallazgo, .ficha__bajada, .comparar, .prueba-roja').forEach((el, i, todos) => {
   if (el.closest('.heroe') || el.closest('.paso') || el.closest('[hidden]')) return;
   el.classList.add('entra');
   const hermanos = [...el.parentElement.children].filter((x) => x.classList.contains('entra'));

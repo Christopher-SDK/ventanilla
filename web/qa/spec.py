@@ -1,6 +1,6 @@
-"""QA B1 · spec de la página demo de Ventanilla, como la usaría alguien nuevo.
+"""Spec de la página demo de Ventanilla, recorrida como la usaría alguien nuevo.
 
-Uso: python3 qa/spec.py [http://127.0.0.1:4912/ventanilla]   (build servido como GitHub Pages con qa/pages.py)
+Uso: uv run --project .. --with pillow python qa/spec.py [http://127.0.0.1:4912/ventanilla]   (build servido como GitHub Pages con qa/pages.py)
 Cada comprobación imprime PASS/FAIL con su evidencia; sale con código 1 si alguna falla.
 """
 import json
@@ -59,7 +59,7 @@ with sync_playwright() as p:
         const fin = () => res([v.currentSrc.split('/').pop(), v.readyState, v.videoWidth]);
         if (v.readyState >= 2) fin(); else { v.addEventListener('loadeddata', fin, { once: true }); setTimeout(fin, 6000); v.load(); }
     })))""")
-    check('los 3 videos cargan', len(videos) == 3 and all(rs >= 2 and w > 0 for _, rs, w in videos), str(videos))
+    check('los 3 videos y la pared cargan', len(videos) == 4 and all(rs >= 2 and w > 0 for _, rs, w in videos), str(videos))
 
     # 3 · la consola (FIRMA-01): cada chip devuelve su veredicto real
     pc = b.new_page(viewport={'width': 1440, 'height': 900})
@@ -94,15 +94,43 @@ with sync_playwright() as p:
     check('pregunta sin grabación: no se inventa respuesta', 'No hay una respuesta grabada' in sin, sin[:60])
     check('cero errores de consola en la consola', not errs, str(errs[:3]))
 
+    # 3a · primer pantallazo de escritorio: rótulo, revisiones, veredicto, chips y campo, enteros
+    for w, h in ((1200, 630), (1024, 600), (1280, 720), (1366, 768), (1440, 900), (1600, 700), (390, 664), (360, 740), (768, 1024), (1920, 1080)):
+        pr = b.new_page(viewport={'width': w, 'height': h})
+        pr.goto(U + '/'); pr.wait_for_timeout(900)
+        fs = pr.evaluate("""[parseFloat(getComputedStyle(document.querySelector('.rotulo')).fontSize), (() => { const v = document.querySelector('.ventanilla__vidrio'), cs = getComputedStyle(v), b = v.getBoundingClientRect();
+  const arriba = b.top + parseFloat(cs.borderTopWidth) + parseFloat(cs.paddingTop) - 1, abajo = b.bottom - parseFloat(cs.paddingBottom) + 1;
+  return Math.max(0, ...['.rotulo', '.revisiones'].map((s) => { const r = v.querySelector(s).getBoundingClientRect(); return Math.max(arriba - r.top, r.bottom - abajo); })); })()]""")
+        piso = 56 if w >= 1280 and h >= 720 else 44
+        check(f'{w}×{h}: el rótulo se ve (≥{piso} px) y no desborda el vidrio', fs[0] >= piso and fs[1] <= 1, str(fs))
+        pr.evaluate('scrollTo(0, 250)'); pr.wait_for_timeout(200)
+        for c in (8, 5, 0):
+            pr.evaluate(f"document.querySelector('.chip[data-chip=\"{c}\"]').click()"); pr.wait_for_timeout(800)
+        lamp = pr.evaluate("(() => { const v = document.querySelector('.ventanilla__vidrio').getBoundingClientRect(); return [...document.querySelectorAll('.revisiones li')].filter(li => { const r = li.getBoundingClientRect(); return r.right > v.right - 8 || li.scrollWidth > li.clientWidth + 1; }).map(li => li.textContent.trim().slice(0, 24)); })()")
+        check(f'{w}×{h}: las 3 lámparas se leen enteras', not lamp, str(lamp))
+        sw = pr.evaluate("[document.documentElement.scrollWidth, innerWidth]")
+        check(f'{w}×{h}: la página no es más ancha que la ventana', sw[0] <= sw[1], str(sw))
+        cortes = pr.evaluate("""(async () => { const out = []; const s = document.querySelector('[data-salida]');
+            for (const c of document.querySelectorAll('.heroe .chip[data-chip]')) { c.click(); await new Promise(r => setTimeout(r, 750));
+              if (s.scrollHeight > s.clientHeight + 1) out.push(c.textContent.trim() + ' ' + s.scrollHeight + '>' + s.clientHeight); } return out; })()""")
+        check(f'{w}×{h}: ningún ejemplo queda cortado en la salida', not cortes, str(cortes[:3]))
+        fs2 = pr.evaluate("parseFloat(getComputedStyle(document.querySelector('.rotulo')).fontSize)")
+        check(f'{w}×{h}: los mensajes no cambian el rótulo ni mueven el scroll', abs(fs2 - fs[0]) < 0.5 and pr.evaluate('scrollY') == 250, f'{fs[0]}→{fs2}, scrollY {pr.evaluate("scrollY")}')
+        pr.close()
+    for w, h in ((1440, 900), (1280, 720), (1920, 1080)):
+        pp1 = b.new_page(viewport={'width': w, 'height': h})
+        pp1.goto(U + '/'); pp1.wait_for_timeout(900)
+        fuera = pp1.evaluate("""['.rotulo', '.revisiones', '[data-salida]', '.chips', '[data-libre] button'].filter(s => { const r = document.querySelector(s).getBoundingClientRect(); return r.bottom > innerHeight || r.top < 0; })""")
+        check(f'{w}×{h}: rótulo, revisiones, veredicto, chips y campo en el primer pantallazo', not fuera, str(fuera))
+        pp1.close()
     # 3b · «atiende sola»: como mucho 3 ciclos, y cede al primer toque
     pa = b.new_page(viewport={'width': 1440, 'height': 900})
     pa.goto(U + '/')
-    pa.evaluate("document.querySelector('[data-salida]').scrollIntoView({block:'center'})")
     vistos = set()
-    for _ in range(16):
+    for _ in range(26):
         pa.wait_for_timeout(1000)
         vistos.add(pa.locator('[data-salida] .veredicto__texto').inner_text()[:40])
-    check('atiende sola: cambia y se detiene tras ≤3 mensajes', 2 <= len(vistos) <= 4, f'{len(vistos)} estados distintos en 16 s')
+    check('atiende sola desde el primer pantallazo: cambia y se detiene tras ≤3 mensajes', 3 <= len(vistos) <= 4, f'{len(vistos)} estados distintos en 26 s')
 
     # 4 · la trastienda (FIRMA-02): 3 pasos de ida y vuelta, y cruzar el vidrio cambia la vista
     for esquema in ('light', 'dark'):
@@ -112,18 +140,17 @@ with sync_playwright() as p:
         top = pt.evaluate("document.querySelector('[data-trastienda]').getBoundingClientRect().top + scrollY")
         alto = pt.evaluate("document.querySelector('[data-trastienda]').offsetHeight")
         pt.evaluate(f"scrollTo(0, {top} - 900)"); pt.wait_for_timeout(500)
-        antes = pt.screenshot()
         activos = []
         for frac in (0.25, 0.55, 0.9, 0.55, 0.25):
             pt.evaluate(f"scrollTo(0, {top} + {alto - 900} * {frac})"); pt.wait_for_timeout(700)
             activos.append(pt.evaluate("[...document.querySelectorAll('.paso')].findIndex(p => p.classList.contains('activo'))"))
-        despues = pt.screenshot()
-        from PIL import Image, ImageChops
-        import io
-        a, d = Image.open(io.BytesIO(antes)).convert('L').resize((144, 90)), Image.open(io.BytesIO(despues)).convert('L').resize((144, 90))
-        cambio = sum(1 for v in ImageChops.difference(a, d).getdata() if v > 24) / (144 * 90)
+        pt.evaluate(f"scrollTo(0, {top} - innerHeight * 0.03)"); pt.wait_for_timeout(500)
+        cubierto = pt.evaluate("""(() => { const c = document.querySelector('[data-cruce]'); if (!c.classList.contains('activo')) return 0;
+            const m = /inset\\(0(?:px)? 0(?:px)? ([\\d.]+)%/.exec(c.style.clipPath || ''); return m ? 1 - parseFloat(m[1]) / 100 : 0; })()""")
+        check(f'trastienda ({esquema}): a mitad del cruce la persiana cubre ≥90 % de la vista', cubierto >= 0.9, f'{cubierto:.0%}')
         check(f'trastienda ({esquema}): pasos 1→2→3 y de vuelta 2→1', activos == [0, 1, 2, 1, 0], str(activos))
-        check(f'trastienda ({esquema}): cruzar el vidrio cambia >60 % del área', cambio > 0.6, f'{cambio:.0%}')
+        pared = pt.evaluate("(() => { const v = document.querySelector('[data-pared]'); return [!v.paused || v.ended || v.currentTime > 0, v.loop]; })()")
+        check(f'trastienda ({esquema}): la pared de video corre al entrar y no queda en bucle', pared[0] and not pared[1], str(pared))
         muestra = """(() => { let n = 0, t = 0; for (let x = 20; x < innerWidth; x += 60) for (let y = 80; y < innerHeight; y += 60) { t++; const e = document.elementFromPoint(x, y); if (e && e.closest('[data-trastienda]')) n++; } return n / t; })()"""
         pt.evaluate(f"scrollTo(0, {top} - 900)"); pt.wait_for_timeout(400)
         fuera = pt.evaluate(muestra)
@@ -237,7 +264,20 @@ with sync_playwright() as p:
         return r.left >= s.left - 1 && r.right <= s.right + 1 && r.bottom <= innerHeight; }).length""")
     check('móvil: al menos 2 chips enteros en el primer pantallazo', enteros >= 2, str(enteros))
     rot = pmv.evaluate("document.querySelector('.rotulo').getBoundingClientRect().bottom <= innerHeight")
+    ver = pmv.evaluate("['.chips', '[data-libre] button'].every(s => document.querySelector(s).getBoundingClientRect().bottom <= innerHeight)")
+    check('móvil: los chips y el campo (la acción) en el primer pantallazo', ver)
     check('móvil: el rótulo entero en el primer pantallazo', rot)
+    # Ninguna ruta es más ancha que la ventana (tablas con .sr, rótulos largos, 404) en tableta y escritorio
+    slugs = pmv.evaluate("[...document.querySelectorAll('.interruptor [data-nombre-falla]')].map(e => e.dataset.nombreFalla)")
+    for w, h in ((768, 1024), (1024, 768), (1280, 720), (1920, 1080)):
+        pw = b.new_page(viewport={'width': w, 'height': h})
+        anchas = []
+        for r in ['/', '/hallazgos/', '/no-existe/'] + [f'/falla/{x}/' for x in slugs]:
+            pw.goto(U + r); pw.wait_for_timeout(300)
+            sw = pw.evaluate('document.documentElement.scrollWidth')
+            if sw > w: anchas.append(f'{r} {sw}')
+        check(f'{w}×{h}: ninguna de las {3 + len(slugs)} rutas es más ancha que la ventana', not anchas, str(anchas))
+        pw.close()
     b.close()
 
 ok = sum(resultados)

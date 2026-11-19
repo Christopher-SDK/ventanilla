@@ -5,7 +5,7 @@
   "scripts": {
     "generar": "node scripts/generar.mjs",
     "dev": "npm run generar && vite --port 4911 --strictPort",
-    "build": "BASE=/ventanilla/ node scripts/generar.mjs && vite build && node scripts/generar.mjs",
+    "build": "node scripts/generar.mjs --base /ventanilla/ && vite build && node scripts/generar.mjs && node scripts/csp.mjs",
     "preview": "python3 qa/pages.py"
   },
   "dependencies": {

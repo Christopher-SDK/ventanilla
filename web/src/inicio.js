@@ -19,33 +19,41 @@ const VEREDICTO = {
 
 // ================================================================ el rótulo llena el vidrio sin desbordarlo (--k medido, no a ojo)
 const vidrio = $('.ventanilla__vidrio');
-const rotulo = $('.rotulo', vidrio);
+// Lo que sobra fuera del área útil del vidrio (el arco y el papel son absolutos y no cuentan)
+function sobra() {
+  const cs = getComputedStyle(vidrio), b = vidrio.getBoundingClientRect();
+  const arriba = b.top + parseFloat(cs.borderTopWidth) + parseFloat(cs.paddingTop) - 1, abajo = b.bottom - parseFloat(cs.paddingBottom) + 1;
+  return Math.max(0, ...['.rotulo', '.revisiones'].map((s) => { const r = vidrio.querySelector(s).getBoundingClientRect(); return Math.max(arriba - r.top, r.bottom - abajo); }));
+}
 function ajustarRotulo() {
   let k = 1;
   vidrio.style.setProperty('--k', k);
-  while (k > 0.5 && vidrio.scrollHeight > vidrio.clientHeight + 1) { k -= 0.04; vidrio.style.setProperty('--k', k.toFixed(2)); }
+  while (k > 0.5 && sobra() > 0) { k -= 0.04; vidrio.style.setProperty('--k', k.toFixed(2)); }
 }
-document.fonts.ready.then(ajustarRotulo);
+document.fonts.ready.then(() => { fijarSalida(); ajustarRotulo(); });
 ajustarRotulo();
-new ResizeObserver(() => requestAnimationFrame(ajustarRotulo)).observe(vidrio);
+// Solo al cambiar la ventana: el contenido del mostrador tiene alto fijo y no debe mover el rótulo
+let medida = `${innerWidth}x${innerHeight}`;
+addEventListener('resize', () => { const m = `${innerWidth}x${innerHeight}`; if (m !== medida) { medida = m; requestAnimationFrame(() => { fijarSalida(); ajustarRotulo(); }); } });
 
 // ================================================================ FIRMA-01 · la rendija
 const salida = $('[data-salida]');
 const papel = $('[data-papel]');
 const lamparas = Object.fromEntries($$('.revisiones li').map((li) => [li.dataset.rev, li]));
+const detalleInicial = Object.fromEntries(Object.entries(lamparas).map(([k, li]) => [k, $('[data-rev-detalle]', li).textContent]));
 let turno = 0;
 
 function estados(e) {
-  if (e.capa === 'guardia') return { guardia: 'frena', ruta: 'omite', verificador: 'omite' };
-  if (e.tipo === 'sin_grabacion') return { guardia: 'pasa', ruta: '', verificador: '' };
-  if (['intencion', 'herramientas', 'busqueda'].includes(e.capa)) return { guardia: 'pasa', ruta: 'pasa', verificador: 'omite' };
-  return { guardia: 'pasa', ruta: 'pasa', verificador: e.tipo === 'bloqueo' ? 'frena' : 'pasa' };
+  if (e.capa === 'guardia' && e.tipo !== 'sin_grabacion') return { guardia: ['frena', e.detalle], ruta: ['omite', 'no llegó'], verificador: ['omite', 'no llegó'] };
+  if (e.tipo === 'sin_grabacion') return { guardia: ['pasa', 'pasó la guardia'], ruta: ['', 'necesita el modelo'], verificador: ['', 'necesita el modelo'] };
+  if (['intencion', 'herramientas', 'busqueda'].includes(e.capa)) return { guardia: ['pasa', 'pasó'], ruta: ['pasa', `${PIEZAS[e.capa]}: ${e.detalle}`], verificador: ['omite', 'sin modelo'] };
+  return { guardia: ['pasa', 'pasó'], ruta: ['pasa', 'consulta a los documentos'], verificador: [e.tipo === 'bloqueo' ? 'frena' : 'pasa', e.detalle] };
 }
 
-function pintarVeredicto(e) {
+function crearVeredicto(e, animar = !reducido) {
   const [rot, tono] = VEREDICTO[e.tipo] || ['', 'neutro'];
   const v = document.createElement('div');
-  v.className = 'veredicto' + (reducido ? '' : ' nace');
+  v.className = 'veredicto' + (animar ? ' nace' : '');
   v.dataset.tono = tono;
   const p = (cls, txt) => { const el = document.createElement('p'); el.className = cls; el.textContent = txt; return el; };
   const r = p('veredicto__rotulo', rot);
@@ -56,29 +64,48 @@ function pintarVeredicto(e) {
   const fuerte = document.createElement('strong'); fuerte.textContent = PIEZAS[e.capa] || e.capa;
   capa.append(fuerte, ` · ${e.detalle}`);
   v.append(r, m, p('veredicto__texto', e.texto), capa);
-  salida.replaceChildren(v);
+  return v;
 }
+const pintarVeredicto = (e) => salida.replaceChildren(crearVeredicto(e));
+
+// El alto de la salida se fija con el veredicto más largo de los ejemplos, medido en el ancho actual:
+// así ningún ejemplo se corta y el rótulo no se mueve con cada mensaje.
+function fijarSalida() {
+  const medidor = document.createElement('div');
+  medidor.style.cssText = `position:absolute;visibility:hidden;left:-9999px;top:0;width:${salida.clientWidth}px`;
+  salida.parentElement.append(medidor);
+  let alto = 0;
+  for (const c of CHIPS) { medidor.replaceChildren(crearVeredicto(c, false)); alto = Math.max(alto, medidor.scrollHeight); }
+  medidor.remove();
+  salida.style.height = `${Math.ceil(alto) + 4}px`;
+}
+fijarSalida(); // antes del primer fotograma: el mostrador no salta al cargar
 
 function pasar(e) {
   const mio = ++turno;
-  Object.values(lamparas).forEach((li) => { li.dataset.estado = ''; });
-  if (reducido) { Object.entries(estados(e)).forEach(([k, v]) => { lamparas[k].dataset.estado = v; }); pintarVeredicto(e); mostrarSalida(); return; }
-  papel.classList.remove('vuela'); void papel.offsetWidth; papel.classList.add('vuela');
   const est = estados(e);
-  ['guardia', 'ruta', 'verificador'].forEach((k, i) => setTimeout(() => { if (mio === turno) lamparas[k].dataset.estado = est[k]; }, 450 + i * 80));
-  setTimeout(() => { if (mio === turno) { pintarVeredicto(e); mostrarSalida(); } }, 450 + 3 * 80);
-}
-// El veredicto nace bajo la ventanilla: si no se ve, la página baja lo justo (solo cuando lo pidió el visitante).
-let pedido = false;
-function mostrarSalida() {
-  if (!pedido) return;
-  pedido = false;
-  const r = salida.getBoundingClientRect();
-  if (r.top < 0 || r.bottom > innerHeight) salida.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'nearest' });
+  Object.entries(lamparas).forEach(([k, li]) => { li.dataset.estado = ''; $('[data-rev-detalle]', li).textContent = detalleInicial[k]; });
+  const encender = (k) => { lamparas[k].dataset.estado = est[k][0]; $('[data-rev-detalle]', lamparas[k]).textContent = est[k][1]; };
+  if (reducido) { Object.keys(lamparas).forEach(encender); pintarVeredicto(e); return; }
+  papel.textContent = e.mensaje;
+  papel.classList.remove('vuela'); void papel.offsetWidth; papel.classList.add('vuela');
+  ['guardia', 'ruta', 'verificador'].forEach((k, i) => setTimeout(() => { if (mio === turno) encender(k); }, 380 + i * 80));
+  setTimeout(() => { if (mio === turno) pintarVeredicto(e); }, 380 + 3 * 80);
 }
 
+// La fila de chips avisa que sigue (degradado) mientras quede algo a la derecha
+const filaChips = $('.chips[data-chips]') || $('.heroe .chips');
+function senalChips() {
+  const resto = filaChips.scrollWidth - filaChips.clientWidth - filaChips.scrollLeft;
+  if (filaChips.scrollWidth <= filaChips.clientWidth + 1) delete filaChips.dataset.desliza;
+  else filaChips.dataset.desliza = resto <= 2 ? 'fin' : 'si';
+}
+filaChips.addEventListener('scroll', senalChips, { passive: true });
+addEventListener('resize', senalChips);
+senalChips();
+
 function marcarChip(i) { $$('.chip[data-chip]').forEach((c) => c.setAttribute('aria-pressed', String(Number(c.dataset.chip) === i))); }
-$$('.chip[data-chip]').forEach((c) => c.addEventListener('click', () => { parar(); pedido = true; marcarChip(Number(c.dataset.chip)); pasar(CHIPS[Number(c.dataset.chip)]); }));
+$$('.chip[data-chip]').forEach((c) => c.addEventListener('click', () => { parar(); marcarChip(Number(c.dataset.chip)); pasar(CHIPS[Number(c.dataset.chip)]); }));
 
 // Campo libre: la guardia corre aquí con las reglas exportadas del código; lo que no está grabado no se inventa.
 const libre = $('[data-libre]');
@@ -92,9 +119,8 @@ libre.addEventListener('submit', (ev) => {
   if (!texto) { error.textContent = 'Escribe un mensaje antes de pasarlo.'; entrada.focus(); return; }
   if (texto.length > 1000) { error.textContent = 'Máximo 1000 caracteres: la API rechaza lo demás.'; entrada.focus(); return; }
   marcarChip(-1);
-  pedido = true;
   const v = guardia(texto);
-  if (!v.permitido) { pasar({ mensaje: texto, tipo: 'bloqueo', texto: BLOQUEO, capa: 'guardia', detalle: `regla de ${v.categoria.replace(/_/g, ' ')} (la misma que en el código Python)` }); return; }
+  if (!v.permitido) { pasar({ mensaje: texto, tipo: 'bloqueo', texto: BLOQUEO, capa: 'guardia', detalle: `regla de ${{ inyeccion: 'inyección', juego_de_rol: 'juego de rol' }[v.categoria] || v.categoria} (la misma que en el código Python)` }); return; }
   const g = grabadas[normalizar(texto)];
   if (g) { pasar({ ...g, mensaje: texto }); return; }
   pasar({
@@ -103,59 +129,97 @@ libre.addEventListener('submit', (ev) => {
   });
 });
 
-// Atiende sola: mensaje a mensaje, máximo 3, y cede al primer toque.
+// Atiende sola: mensaje a mensaje, máximo 3, mientras se vea la ventanilla; cede al primer toque.
 const ORDEN = [5, 0, 8];
 let reloj = null;
 let ciclos = 0;
 function parar() { clearInterval(reloj); reloj = null; }
 if (!reducido) {
-  let salidaVisible = false;
-  new IntersectionObserver(([e]) => { salidaVisible = e.isIntersecting; }, { threshold: 0.6 }).observe(salida);
+  let visible = false;
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0.5 }).observe($('[data-ventanilla]'));
   reloj = setInterval(() => {
     if (ciclos >= ORDEN.length) { parar(); return; }
-    if (document.hidden || !salidaVisible) return; // atiende solo si alguien mira el veredicto
+    if (document.hidden || !visible) return;
     const i = ORDEN[ciclos++];
     marcarChip(i);
     pasar(CHIPS[i]);
-  }, 3400);
+  }, 7000); // tiempo para leer el rótulo y la primera línea de cada respuesta
   ['pointerdown', 'keydown', 'focusin'].forEach((t) => $('#consola').addEventListener(t, parar, { once: true }));
 }
 
 // ================================================================ cabecera: toma el tono de la sala en la que estás
 const cab = $('.cab');
-$$('.trastienda, .fallas').forEach((s) => ScrollTrigger.create({ trigger: s, start: 'top 64px', end: 'bottom 64px', onToggle: (st) => cab.classList.toggle('tono-trastienda', st.isActive) }));
+$$('.trastienda, .tono-trastienda').forEach((s) => ScrollTrigger.create({ trigger: s, start: 'top 64px', end: 'bottom 64px', onToggle: (st) => cab.classList.toggle('tono-trastienda', st.isActive) }));
 
-// ================================================================ FIRMA-02 · la trastienda
+// ================================================================ FIRMA-02 · cruzar el vidrio y la trastienda
 const tras = $('[data-trastienda]');
 const pasos = $$('.paso', tras);
+const indice = $$('.indice-pasos li', tras);
+const cruce = $('[data-cruce]');
 const escenaPosible = () => !reducido && matchMedia('(min-width: 901px) and (min-height: 601px)').matches;
-let escena = null;
+let disparadores = [];
 function armarEscena() {
-  escena?.kill(); escena = null;
+  disparadores.forEach((d) => d.kill()); disparadores = [];
   const activa = escenaPosible();
   tras.classList.toggle('escena', activa);
-  if (!activa) { pasos.forEach((p) => p.classList.add('activo')); ScrollTrigger.refresh(); return; }
-  const marcar = (n) => pasos.forEach((p, i) => p.classList.toggle('activo', i === n));
+  const marcar = (n) => { pasos.forEach((p, i) => p.classList.toggle('activo', !activa || i === n)); indice.forEach((l, i) => l.classList.toggle('actual', i === n)); };
   marcar(0);
-  escena = ScrollTrigger.create({
-    trigger: tras, start: 'top top', end: 'bottom bottom',
-    onUpdate: (st) => {
-      const p = st.progress;
-      tras.style.setProperty('--abierta', Math.min(1, p / 0.14).toFixed(3)); // la persiana sube: se cruza el vidrio
-      marcar(p < 0.42 ? 0 : p < 0.72 ? 1 : 2);
-    },
-  });
+  if (!reducido) {
+    // La persiana baja sobre la sala mientras la trastienda sube a la pantalla...
+    disparadores.push(ScrollTrigger.create({
+      trigger: tras, start: 'top 40%', end: 'top top', // empieza cuando el héroe ya salió: nunca tapa lo que se está leyendo
+      onUpdate: (st) => { cruce.classList.toggle('activo', st.progress > 0.01); cruce.style.clipPath = `inset(0 0 ${((1 - st.progress) * 100).toFixed(2)}% 0)`; },
+      onLeaveBack: () => cruce.classList.remove('activo'),
+    }));
+    // ...y sube sobre la pared de terminal en el primer medio pantallazo de la trastienda.
+    disparadores.push(ScrollTrigger.create({
+      trigger: tras, start: 'top top', end: () => `top+=${innerHeight * 0.5} top`,
+      onUpdate: (st) => { cruce.classList.toggle('activo', st.progress < 0.99); cruce.style.clipPath = `inset(0 0 ${(st.progress * 100).toFixed(2)}% 0)`; },
+      onLeave: () => cruce.classList.remove('activo'),
+    }));
+  }
+  if (activa) {
+    disparadores.push(ScrollTrigger.create({
+      trigger: tras, start: 'top top', end: 'bottom bottom',
+      onUpdate: (st) => marcar(st.progress < 0.45 ? 0 : st.progress < 0.75 ? 1 : 2),
+    }));
+  }
   ScrollTrigger.refresh();
 }
 armarEscena();
+// La pared: los últimos 5 s reales de la suite, una vez, al entrar (sin bucle: termina en «282 passed»)
+const pared = $('[data-pared]', tras);
+if (!reducido && 'IntersectionObserver' in window) {
+  new IntersectionObserver(([e], o) => {
+    if (!e.isIntersecting) return;
+    o.disconnect();
+    pared.preload = 'auto';
+    pared.addEventListener('loadedmetadata', () => { pared.currentTime = Math.max(0, pared.duration - 5); pared.play().catch(() => {}); }, { once: true });
+    pared.load();
+  }, { rootMargin: '0px 0px 30% 0px' }).observe(tras);
+}
 let ancho = innerWidth, alto = innerHeight;
 addEventListener('resize', () => { if (Math.abs(innerWidth - ancho) > 40 || Math.abs(innerHeight - alto) > 120) { ancho = innerWidth; alto = innerHeight; armarEscena(); } });
 
 // ================================================================ FIRMA-03 · rompe una pieza
 const interruptores = $$('.interruptor');
-const persianaBanco = $('.diagrama .persiana-chica');
-const piezas = $$('.diagrama .pieza');
+const persianaBanco = $('.persiana-banco');
+const diagrama = $('.diagrama');
+const piezas = $$('.pieza', diagrama);
+const papelDiagrama = $('[data-papel-diagrama]');
 const marcarPieza = (p) => piezas.forEach((x) => x.classList.toggle('rota', x.dataset.pieza === p));
+function recorrer(pieza) {
+  if (reducido) return;
+  const rota = piezas.find((x) => x.dataset.pieza === pieza);
+  const base = diagrama.getBoundingClientRect();
+  const fin = base.width - 12 * 2 - 46 - 20;
+  const enRota = rota ? rota.getBoundingClientRect().left - base.left + rota.offsetWidth / 2 - 12 : fin;
+  papelDiagrama.classList.remove('recorre', 'danado');
+  papelDiagrama.style.setProperty('--hasta', `${fin}px`);
+  void papelDiagrama.offsetWidth;
+  papelDiagrama.classList.add('recorre');
+  setTimeout(() => papelDiagrama.classList.add('danado'), Math.max(0, Math.min(900, (enRota / fin) * 600)));
+}
 marcarPieza(interruptores[0].dataset.pieza);
 let cambio = 0;
 interruptores.forEach((b) => b.addEventListener('click', () => {
@@ -166,11 +230,14 @@ interruptores.forEach((b) => b.addEventListener('click', () => {
     if (mio !== cambio) return;
     $$('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== b.dataset.falla; });
     marcarPieza(b.dataset.pieza);
+    // En móvil, que se vea lo que rompió: el diagrama sube a la vista si quedó abajo
+    if (innerWidth <= 760 && diagrama.getBoundingClientRect().top > innerHeight - 120) diagrama.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'start' });
   };
   if (reducido) { mostrar(); return; }
   persianaBanco.classList.remove('sube'); persianaBanco.classList.add('baja');
-  setTimeout(() => { mostrar(); persianaBanco.classList.remove('baja'); persianaBanco.classList.add('sube'); }, 470);
+  setTimeout(() => { mostrar(); persianaBanco.classList.remove('baja'); persianaBanco.classList.add('sube'); setTimeout(() => recorrer(b.dataset.pieza), 300); }, 440);
 }));
+new IntersectionObserver(([e], o) => { if (e.isIntersecting) { recorrer(interruptores[0].dataset.pieza); o.disconnect(); } }, { threshold: 0.6 }).observe(diagrama);
 // Flechas entre interruptores (el foco se mueve; Espacio o Enter encienden)
 $('.interruptores').addEventListener('keydown', (e) => {
   const i = interruptores.indexOf(document.activeElement);
@@ -178,6 +245,16 @@ $('.interruptores').addEventListener('keydown', (e) => {
   e.preventDefault();
   interruptores[(i + (['ArrowDown', 'ArrowRight'].includes(e.key) ? 1 : interruptores.length - 1)) % interruptores.length].focus();
 });
+
+// ================================================================ hallazgos: el antes se tacha y entra el después al verse
+if ('IntersectionObserver' in window && !reducido) {
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('visto'); io.unobserve(e.target); } }), { threshold: 0.5 });
+  $$('.tarjeta').forEach((t) => io.observe(t));
+} else $$('.tarjeta').forEach((t) => t.classList.add('visto'));
+
+// ================================================================ pósteres: se piden al acercarse (no compiten con el JS en redes lentas)
+const ioPoster = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.poster = e.target.dataset.poster; ioPoster.unobserve(e.target); } }), { rootMargin: '800px 0px' });
+$$('video[data-poster]').forEach((v) => ioPoster.observe(v));
 
 // ================================================================ videos: todos a la vez, cada uno con su pausa
 const videos = $$('[data-video]');
@@ -188,6 +265,10 @@ function rotular(v) {
   b.setAttribute('aria-label', `${v.paused ? 'Reproducir' : 'Pausar'}: ${cap}`);
 }
 videos.forEach((v) => {
+  // Los últimos 6 s en bucle, donde ya hay salida en pantalla (el póster es el final): nunca un recuadro vacío
+  const tramo = () => { v.currentTime = Math.max(0, v.duration - 6); };
+  v.addEventListener('loadedmetadata', tramo, { once: true });
+  v.addEventListener('ended', () => { tramo(); v.play().catch(() => {}); });
   v.addEventListener('play', () => rotular(v));
   v.addEventListener('pause', () => rotular(v));
   v.parentElement.querySelector('[data-pausa]').addEventListener('click', () => { v.dataset.manual = '1'; v.paused ? v.play().catch(() => {}) : v.pause(); });
@@ -195,10 +276,12 @@ videos.forEach((v) => {
 if ('IntersectionObserver' in window) {
   new IntersectionObserver(([e]) => {
     videos.forEach((v) => {
-      if (e.isIntersecting && !reducido && !v.dataset.manual) v.play().catch(() => {});
+      if (e.isIntersecting && !reducido && !v.dataset.manual) {
+        v.play().catch(() => {});
+      }
       if (!e.isIntersecting && !v.paused) v.pause();
     });
-  }, { threshold: 0.25 }).observe($('.videos'));
+  }, { threshold: 0.5 }).observe($('.videos'));
 }
 
 // ================================================================ guía «Pruébalo en tu máquina»
@@ -241,3 +324,8 @@ $$('.respuesta').forEach((r) => {
 });
 $('[data-reiniciar]').addEventListener('click', () => { estado = { hechos: [], atrapadas: [] }; guardarGuia(); pintarGuia(); });
 pintarGuia();
+
+// Lo que se tocó antes de que cargara el JS se atiende ahora (solo lo último)
+window.__listo = true;
+const pendiente = window.__cola?.pop();
+if (pendiente) { if (pendiente.tagName === 'FORM') pendiente.requestSubmit(); else pendiente.click(); }

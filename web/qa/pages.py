@@ -1,6 +1,6 @@
 """Serves web/dist the way GitHub Pages does: under /ventanilla/, with 404.html and status 404.
 
-Usage: python3 qa/pages.py [port]   (default 4912) → http://127.0.0.1:4912/ventanilla/
+Usage: uv run python qa/pages.py [port]   (default 4912) → http://127.0.0.1:4912/ventanilla/
 """
 import http.server, os, sys
 
