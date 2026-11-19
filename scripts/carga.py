@@ -12,17 +12,25 @@ RAIZ = Path(__file__).resolve().parents[1]
 P95_MAX_MS = int(os.environ.get("CARGA_P95_MS", "300"))
 SALIDA = RAIZ / "reporte" / "carga"
 SALIDA.mkdir(parents=True, exist_ok=True)
-puerto = "8765"
+import socket
+
+with socket.socket() as libre:  # un puerto libre: nunca mide a otro servidor que ya ocupe el 8765
+    libre.bind(("127.0.0.1", 0))
+    puerto = str(libre.getsockname()[1])
 entorno = {**os.environ, "VENTANILLA_MODO": "reproducir", "VENTANILLA_POR_MINUTO": "100000"}
 api = subprocess.Popen([sys.executable, "-m", "uvicorn", "ventanilla.adaptadores.api:app_desde_entorno", "--factory", "--port", puerto,
                         "--log-level", "warning"], cwd=RAIZ, env=entorno)
 try:
     for _ in range(100):
+        if api.poll() is not None:
+            sys.exit(f"carga: la API no arrancó (código {api.returncode})")
         try:
             if httpx.get(f"http://127.0.0.1:{puerto}/api/salud").status_code == 200:
                 break
         except httpx.HTTPError:
             time.sleep(0.2)
+    else:
+        sys.exit("carga: la API no respondió /api/salud en 20 s")
     subprocess.run([sys.executable, "-m", "locust", "-f", "carga/locustfile.py", "--headless", "-u", "20", "-r", "10", "-t", os.environ.get("CARGA_TIEMPO", "30s"),
                     "--host", f"http://127.0.0.1:{puerto}", "--csv", str(SALIDA / "locust"), "--only-summary"], cwd=RAIZ, check=False)
 finally:
