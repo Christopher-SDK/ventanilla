@@ -1,0 +1,8 @@
+.venv
+.git
+reporte
+tests
+evals
+web
+carga
+**/__pycache__

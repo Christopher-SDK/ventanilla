@@ -1,0 +1,147 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  VENTANILLA_MODO: reproducir   # sin modelo: las respuestas salen de grabaciones/
+  DEEPEVAL_TELEMETRY_OPT_OUT: "1"
+  PROMPTFOO_DISABLE_TELEMETRY: "1"
+
+jobs:
+  suite:
+    name: Suite completa
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.13.9"
+          enable-cache: true
+      - run: uv sync --locked --all-extras
+      - run: uv run playwright install --with-deps chromium
+      - name: Pruebas
+        run: uv run pytest --alluredir=allure-results --junitxml=reporte/junit.xml
+      - name: Dependencias sin vulnerabilidades conocidas + SBOM
+        run: |
+          uv export --frozen --all-extras --no-hashes --no-emit-project > requirements.txt
+          uvx pip-audit==2.10.1 -r requirements.txt --strict
+          uvx pip-audit==2.10.1 -r requirements.txt -f cyclonedx-json -o reporte/sbom.cdx.json
+      - name: Modelos fijados
+        run: uv run pytest tests/suministro -q
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: suite
+          path: |
+            allure-results
+            reporte
+
+  fallas:
+    name: Falla ${{ matrix.falla }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        falla: [TASA_INVENTADA, CITA_FANTASMA, INYECCION_INDIRECTA, FUGA_DE_DATOS, JUEGO_DE_ROL, RECHAZO_EXCESIVO, REGRESION_DE_PROMPT]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.13.9"
+          enable-cache: true
+      - run: uv sync --locked --all-extras
+      - run: uv run playwright install --with-deps chromium
+      - name: La suite tiene que atrapar la falla
+        run: |
+          if uv run pytest -q --falla ${{ matrix.falla }} -p no:randomly > salida.txt 2>&1; then
+            echo "::error::La falla ${{ matrix.falla }} pasó sin que ninguna prueba la detectara"
+            cat salida.txt
+            exit 1
+          fi
+          grep -E "^FAILED" salida.txt | head -20
+          tail -1 salida.txt
+
+  promptfoo:
+    name: Red team con promptfoo
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.13.9"
+          enable-cache: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - run: uv sync --locked
+      - name: Casos generados desde evals/ (no deben estar desactualizados)
+        run: |
+          uv run python scripts/generar_promptfoo.py
+          git diff --exit-code evals/promptfoo/promptfooconfig.yaml
+      - name: API con respuestas grabadas
+        run: |
+          VENTANILLA_POR_MINUTO=100000 uv run uvicorn ventanilla.adaptadores.api:app_desde_entorno --factory --port 8765 &
+          for i in $(seq 30); do curl -sf localhost:8765/api/salud && break; sleep 1; done
+      - name: promptfoo eval
+        working-directory: evals/promptfoo
+        run: npx --yes promptfoo@0.126.0 eval -c promptfooconfig.yaml --no-cache -j 4 -o ../../reporte/promptfoo.json
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: promptfoo
+          path: reporte/promptfoo.json
+
+  carga:
+    name: Carga con Locust
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.13.9"
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run python scripts/carga.py
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: carga
+          path: reporte/carga
+
+  matriz:
+    name: Matriz de detección
+    needs: [suite, fallas]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.13.9"
+          enable-cache: true
+      - run: uv sync --locked --all-extras
+      - run: uv run playwright install --with-deps chromium
+      - name: Matriz
+        run: |
+          uv run python scripts/matriz.py
+          cat reporte/matriz.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: matriz
+          path: reporte

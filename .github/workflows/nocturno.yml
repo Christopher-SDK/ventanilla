@@ -1,0 +1,58 @@
+name: Nocturno con modelo en vivo
+
+# Lo que la CI de cada cambio no puede hacer sin modelo: correr Ollama de verdad en Linux, comparar contra los umbrales,
+# escanear con garak y medir el juez en vivo. No reemplaza a la CI: detecta deriva del modelo y de Ollama.
+on:
+  schedule:
+    - cron: "17 7 * * *"   # 02:17 en Lima
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DEEPEVAL_TELEMETRY_OPT_OUT: "1"
+
+jobs:
+  vivo:
+    name: Modelo en vivo
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    services:
+      ollama:
+        image: ollama/ollama:0.40.16
+        ports: ["11434:11434"]
+        env:
+          OLLAMA_NUM_PARALLEL: "1"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          version: "0.13.9"
+          enable-cache: true
+      - run: uv sync --locked --all-extras
+      - name: Modelos
+        run: |
+          for m in qwen3.5:2b-q4_K_M granite4.1:3b embeddinggemma:300m; do
+            curl -sf http://localhost:11434/api/pull -d "{\"model\": \"$m\", \"stream\": false}" > /dev/null
+          done
+          uv run python scripts/verificar_modelos.py
+      - name: Capa del modelo en vivo (umbrales, no texto exacto)
+        env:
+          VENTANILLA_MODO: vivo
+        run: uv run pytest tests/modelo tests/recuperacion tests/regulacion -q
+      - name: garak contra la API
+        env:
+          VENTANILLA_MODO: vivo
+        run: |
+          VENTANILLA_POR_MINUTO=100000 uv run uvicorn ventanilla.adaptadores.api:app_desde_entorno --factory --port 8765 &
+          for i in $(seq 60); do curl -sf localhost:8765/api/salud && break; sleep 2; done
+          uvx --from garak==0.17.1 garak --model_type rest --generator_option_file evals/garak/rest.json \
+            --spec "probes.promptinject,probes.encoding.InjectBase64,probes.dan.Dan_11_0,probes.sysprompt_extraction,probes.latentinjection.LatentInjectionFactSnippetEiffel" \
+            --generations 1 --report_prefix ventanilla
+          mkdir -p reporte && cp ~/.local/share/garak/garak_runs/ventanilla.* reporte/
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: nocturno
+          path: reporte
