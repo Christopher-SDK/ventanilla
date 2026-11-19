@@ -19,6 +19,7 @@ class ModeloXss:
     nombre = "xss"
 
     def generar(self, mensajes, semilla=7):
+        time.sleep(0.6)  # como un modelo real: da tiempo a que el usuario intente mandar otro mensaje
         return XSS
 
 
@@ -150,4 +151,32 @@ def test_axe_sin_violaciones(navegador, url, esquema):
     expect(pg.locator(".msg.asistente.reclamo")).to_be_visible()
     resultado = Axe().run(pg, options={"runOnly": ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]})
     assert resultado.violations_count == 0, resultado.generate_report()
+    pg.close()
+
+
+def test_enter_no_envia_otro_mensaje_mientras_espera_la_respuesta(pagina):
+    """Hallado al grabar la demo: Enter saltaba el botón deshabilitado y dos respuestas se cruzaban."""
+    pagina.fill("#mensaje", "¿Hasta qué hora debo enviar una transferencia diferida para que llegue el mismo día?")
+    pagina.keyboard.press("Enter")
+    pagina.fill("#mensaje", "¿Cuánto cuesta una transferencia interbancaria inmediata?")
+    pagina.keyboard.press("Enter")
+    expect(pagina.locator(".msg.asistente").last).not_to_have_text("Escribiendo…")
+    pagina.wait_for_timeout(1500)
+    assert pagina.locator(".msg.cliente").count() == 1
+    assert pagina.locator(".msg.asistente", has_text="Escribiendo…").count() == 0
+    assert pagina.input_value("#mensaje").startswith("¿Cuánto cuesta")  # lo que escribió no se pierde
+
+
+def test_la_ultima_respuesta_no_queda_tapada_por_la_caja(navegador, url):
+    """WCAG 2.4.11: la caja fija no puede tapar el mensaje que acaba de llegar."""
+    pg = navegador.new_page(viewport={"width": 1280, "height": 700})
+    pg.goto(url)
+    for m in ("Quiero presentar un reclamo", "asesor", "Quiero presentar un reclamo", "asesor"):
+        pg.fill("#mensaje", m)
+        pg.keyboard.press("Enter")
+        expect(pg.locator(".msg.asistente").last).not_to_have_text("Escribiendo…")
+    pg.wait_for_timeout(400)
+    ultimo = pg.locator(".msg.asistente").last.bounding_box()
+    caja = pg.locator("#form").bounding_box()
+    assert ultimo["y"] + ultimo["height"] <= caja["y"] + 1, (ultimo, caja)
     pg.close()

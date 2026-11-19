@@ -40,6 +40,8 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# El plugin de pytest de DeepEval imprime «Running teardown…» al cerrar; la suite usa sus métricas directamente.
+addopts = "-p no:deepeval"
 filterwarnings = ["error::pytest.PytestUnraisableExceptionWarning"]
 asyncio_default_fixture_loop_scope = "function"
 disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true

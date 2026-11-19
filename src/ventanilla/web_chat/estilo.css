@@ -14,7 +14,7 @@ button:disabled{opacity:.6;cursor:wait}
 .sesion form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
 select{background:var(--papel);color:var(--tinta);border-color:var(--linea)}
 .log{list-style:none;margin:0;padding:16px 0;flex:1;display:flex;flex-direction:column;gap:12px}
-.msg{max-width:85%;padding:10px 14px;border-radius:12px;background:var(--papel);border:1px solid var(--linea)}
+.msg{scroll-margin-bottom:var(--alto-caja,180px);max-width:85%;padding:10px 14px;border-radius:12px;background:var(--papel);border:1px solid var(--linea)}
 .msg p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
 .msg.cliente{align-self:flex-end;border-color:var(--acento)}
 .msg.bloqueo{border-color:var(--alerta)}

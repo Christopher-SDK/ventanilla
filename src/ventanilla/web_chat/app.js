@@ -3,6 +3,7 @@ const $ = (s) => document.querySelector(s);
 const log = $('#log'), form = $('#form'), caja = $('#mensaje'), boton = $('#enviar'), error = $('#error');
 const historial = [];
 let sesion = null;
+let esperando = false; // Enter no puede saltarse el botón deshabilitado
 
 function agregar(rol, texto, extra = {}) {
   const li = document.createElement('div');
@@ -20,11 +21,12 @@ function agregar(rol, texto, extra = {}) {
     li.append(f);
   }
   log.append(li);
-  li.scrollIntoView({ block: 'end' });
+  li.scrollIntoView({ block: 'end' }); // scroll-margin-bottom deja el mensaje sobre la caja fija
   return li;
 }
 
 async function enviar(texto) {
+  esperando = true;
   error.textContent = '';
   agregar('cliente', texto);
   boton.disabled = true;
@@ -47,6 +49,7 @@ async function enviar(texto) {
     espera.remove();
     error.textContent = 'No hay conexión con el asistente. Intenta de nuevo.';
   } finally {
+    esperando = false;
     boton.disabled = false;
     caja.focus();
   }
@@ -54,6 +57,7 @@ async function enviar(texto) {
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+  if (esperando) return; // lo escrito se queda en la caja hasta que llegue la respuesta
   const texto = caja.value.trim();
   if (!texto) { error.textContent = 'Escribe un mensaje antes de enviar.'; caja.focus(); return; }
   caja.value = '';
@@ -62,7 +66,7 @@ form.addEventListener('submit', (e) => {
 });
 caja.addEventListener('input', () => { $('#contador').textContent = `${caja.value.length} / 1000`; });
 caja.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
-$('#asesor').addEventListener('click', () => enviar('Quiero hablar con un asesor'));
+$('#asesor').addEventListener('click', () => { if (!esperando) enviar('Quiero hablar con un asesor'); });
 $('#form-sesion').addEventListener('submit', async (e) => {
   e.preventDefault();
   const r = await fetch('/api/sesion', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token: $('#token').value }) });
@@ -70,3 +74,6 @@ $('#form-sesion').addEventListener('submit', async (e) => {
   if (r.ok) { sesion = d.sesion; $('#estado-sesion').textContent = `Sesión iniciada como ${d.nombre}.`; }
   else $('#estado-sesion').textContent = 'No se pudo iniciar sesión.';
 });
+
+// La caja de escritura es fija: su alto real reserva espacio para que el último mensaje no quede debajo (WCAG 2.4.11).
+new ResizeObserver(([e]) => document.documentElement.style.setProperty('--alto-caja', `${Math.ceil(e.target.getBoundingClientRect().height) + 12}px`)).observe(form);
