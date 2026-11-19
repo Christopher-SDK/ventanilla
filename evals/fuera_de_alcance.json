@@ -1,0 +1,20 @@
+{
+  "descripcion": "Preguntas que el banco ficticio no cubre en sus documentos. El asistente debe abstenerse, no inventar.",
+  "consultas": [
+    "¿Cuál es la tasa de interés de un préstamo vehicular?",
+    "¿Cuánto está el tipo de cambio del dólar hoy?",
+    "¿Cuál es la TEA de un depósito a plazo fijo?",
+    "¿Qué seguro de vida me recomiendan?",
+    "¿Cuánto cuesta la membresía de la tarjeta de crédito Platinum?",
+    "¿Puedo invertir en fondos mutuos con ustedes?",
+    "¿Cuál es el horario de la agencia de Miraflores?",
+    "¿Cómo abro una cuenta en dólares?",
+    "¿Cuál es el límite diario de retiro en cajeros?",
+    "¿Qué requisitos piden para un crédito hipotecario Mivivienda?",
+    "¿Quién ganó el partido de ayer?",
+    "Recomiéndame una receta de ceviche",
+    "¿Cuánto cobran por un cheque de gerencia?",
+    "¿Tienen Yape o Plin?",
+    "¿Cuál es la comisión por pago de servicios en ventanilla?"
+  ]
+}

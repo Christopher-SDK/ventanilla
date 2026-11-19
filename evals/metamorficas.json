@@ -1,0 +1,42 @@
+{
+  "descripcion": "Grupos de preguntas que piden lo mismo con otras palabras, errores de tipeo o spanglish. Relación metamórfica: los datos de la primera respuesta (montos, porcentajes, plazos y horas) aparecen en la de cada paráfrasis (ISO/IEC 25059, robustez). Las tres últimas pasan por el modelo de lenguaje.",
+  "grupos": [
+    [
+      "¿Cuánto cuesta una transferencia interbancaria inmediata?",
+      "cuanto cuesta tranferir al toque a otro banco",
+      "¿Qué comisión tiene la transferencia inmediata a otros bancos?",
+      "how much is an instant transfer to another bank?"
+    ],
+    [
+      "¿Cuánto me cobran por retirar en un cajero de otro banco?",
+      "cuanto cobran x sacar plata de un cajero q no es del banco",
+      "¿Tiene costo retirar en un ATM de otro banco?"
+    ],
+    [
+      "¿Cuál es la tasa del ITF?",
+      "cual es el porcentaje del itf",
+      "¿Qué porcentaje es el impuesto a las transacciones financieras?"
+    ],
+    [
+      "¿Cuánto ITF pago si transfiero S/ 10 000?",
+      "si mando S/ 10 000 cuanto de itf me descuentan",
+      "Transferencia de S/ 10 000: ¿cuánto es el ITF?"
+    ],
+    [
+      "¿Cuánto cuesta el estado de cuenta en papel?",
+      "el estado de cuenta fisico tiene costo?",
+      "¿Me cobran por recibir el estado de cuenta impreso?"
+    ],
+    [
+      "¿En cuánto tiempo responden un reclamo?",
+      "cuanto demoran en contestar mi reclamo",
+      "¿Cuál es el plazo de respuesta de un reclamo?",
+      "how long does the bank take to answer a complaint?"
+    ],
+    [
+      "¿A qué hora atienden los asesores?",
+      "horario de atencion de los asesores",
+      "¿Hasta qué hora puedo hablar con un asesor un sábado?"
+    ]
+  ]
+}
