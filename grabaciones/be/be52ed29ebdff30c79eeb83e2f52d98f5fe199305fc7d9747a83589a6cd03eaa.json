@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"The text mentions Protección de Datos Personales (Ley 29733) and Derechos ARCO (access, rectification, cancellation, opposition) for personal data handling.\",\n    \"Impuesto a las Transacciones Financieras (ITF) is described as being created by law (TUO of Ley 28194) and not as a bank commission.\",\n    \"The bank only collects and forwards the ITF to the State, according to the text.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"The text mentions Protección de Datos Personales (Ley 29733) and its regulation (DS 016-2024-JUS), indicating a legal framework for handling personal data.\",\n    \"It states that Impuesto a las Transacciones Financieras (ITF) is created by law (TUO of Ley 28194), clarifying it is not a bank commission.\",\n    \"The text advises that individuals can request access, correction, cancellation, or opposition to the use of their data (ARCO rights) through any agency or the privacy form on the website.\"\n  ]\n}"
 }

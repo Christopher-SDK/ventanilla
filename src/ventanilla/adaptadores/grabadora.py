@@ -29,6 +29,9 @@ class Grabadora:
             raise ValueError(f"modo {modo!r}: usa uno de {MODOS}")
         self.carpeta, self.modo = carpeta, modo
         self.usadas: set[str] = set()
+        # En Linux sin GPU, la misma petición puede responder distinto dentro de una corrida. Al grabar, la primera respuesta
+        # se queda: si se pisara, las llamadas que ya dependían de ella no podrían reproducirse (docs/hallazgos.md, 19).
+        self.grabadas: dict[str, object] = {}
 
     def ruta(self, k: str) -> Path:
         return self.carpeta / k[:2] / f"{k}.json"
@@ -46,8 +49,11 @@ class Grabadora:
             raise GrabacionFaltante(
                 f"No hay grabación para esta llamada ({k[:12]}). Con Ollama encendido, corre con VENTANILLA_MODO=auto para crearla."
             )
+        if k in self.grabadas:
+            return self.grabadas[k]
         respuesta = real(peticion)
         if self.modo != "vivo":
+            self.grabadas[k] = respuesta
             ruta.parent.mkdir(parents=True, exist_ok=True)
             ruta.write_text(json.dumps({"peticion": peticion, "respuesta": respuesta}, ensure_ascii=False, indent=1), encoding="utf-8")
         return respuesta

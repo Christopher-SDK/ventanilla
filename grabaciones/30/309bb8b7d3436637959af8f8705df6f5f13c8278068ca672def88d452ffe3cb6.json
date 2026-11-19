@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"30 días calendario\", \"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"En cuánto tiempo responden un reclamo? El banco responde los reclamos en un plazo máximo de 30 días calendario.\", \"correcta\": false}"
 }

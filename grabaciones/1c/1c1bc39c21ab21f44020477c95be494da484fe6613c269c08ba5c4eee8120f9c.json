@@ -1,0 +1,48 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nAtención y asesores. ## Bloqueo de tarjeta\n\nSi perdiste tu tarjeta o te la robaron, bloquéala de inmediato desde la app o llamando a la línea de emergencias, disponible las 24 horas.\n\nPREGUNTA: Me robaron la tarjeta, ¿cómo la bloqueo?\nRESPUESTA: Bloquéala de inmediato desde la app o llamando a la línea de emergencias, disponible las 24 horas.\n\nEscribe, en este orden:\n- «el_contexto_dice»: qué responde el CONTEXTO a la PREGUNTA, en una oración.\n- «la_respuesta_dice»: qué responde la RESPUESTA, en una oración.\n- «contradiccion»: lo que la RESPUESTA afirma y el CONTEXTO contradice o no dice (montos, plazos, horarios, a dónde acudir,\n  si atiende una persona o un asistente, condiciones), o «ninguna». Negarse a dar un dato u ofrecer un asesor no es contradicción.\n- «correcta»: true solo si escribiste «ninguna»."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "el_contexto_dice": {
+     "title": "El Contexto Dice",
+     "type": "string"
+    },
+    "la_respuesta_dice": {
+     "title": "La Respuesta Dice",
+     "type": "string"
+    },
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "el_contexto_dice",
+    "la_respuesta_dice",
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Razonado",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\"el_contexto_dice\": \"Bloquéala de inmediato desde la app o llamando a la línea de emergencias, disponible las 24 horas.\", \"la_respuesta_dice\": \"Bloquéala de inmediato desde la app o llamando a la línea de emergencias, disponible las 24 horas.\", \"contradiccion\": \"ninguna\", \"correcta\": true}"
+}

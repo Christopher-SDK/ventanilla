@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"No hay ninguna contradicción entre la respuesta y el contexto proporcionado.\", \"correcta\": true}"
+ "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
 }

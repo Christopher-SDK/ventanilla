@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"The Impuesto a las Transacciones Financieras (ITF) is paid by the sender of the money in a transfer.\",\n    \"If the amount is so small that the truncated tax is zero, no tax is charged.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"The Financial Transaction Tax (ITF) is paid by the sender of the money in a transfer.\",\n    \"If the amount is so small that the rounded tax is zero, no tax is charged.\"\n  ]\n}"
 }

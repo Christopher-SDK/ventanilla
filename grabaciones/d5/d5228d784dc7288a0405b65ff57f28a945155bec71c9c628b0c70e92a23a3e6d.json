@@ -1,0 +1,48 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nPrivacidad y seguridad. ## Lo que nunca te pediremos\n\nEl banco nunca te pedirá por chat, correo, SMS ni llamada tu clave de internet, tu clave de tarjeta, tu token ni el código de verificación que te llega por SMS. Si alguien te lo pide, es un intento de fraude.\n\nPREGUNTA: ¿Me pueden pedir el código que llega por SMS?\nRESPUESTA: No, no podemos pedirte el código de verificación por chat. Si alguien te lo pide, es un intento de fraude.\n\nEscribe, en este orden:\n- «el_contexto_dice»: qué responde el CONTEXTO a la PREGUNTA, en una oración.\n- «la_respuesta_dice»: qué responde la RESPUESTA, en una oración.\n- «contradiccion»: lo que la RESPUESTA afirma y el CONTEXTO contradice o no dice (montos, plazos, horarios, a dónde acudir,\n  si atiende una persona o un asistente, condiciones), o «ninguna». Negarse a dar un dato u ofrecer un asesor no es contradicción.\n- «correcta»: true solo si escribiste «ninguna»."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "el_contexto_dice": {
+     "title": "El Contexto Dice",
+     "type": "string"
+    },
+    "la_respuesta_dice": {
+     "title": "La Respuesta Dice",
+     "type": "string"
+    },
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "el_contexto_dice",
+    "la_respuesta_dice",
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Razonado",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"el_contexto_dice\": \"El banco nunca te pedirá tu código de verificación por SMS.\",\n  \"la_respuesta_dice\": \"No, no podemos pedirte el código de verificación por chat.\",\n  \"contradiccion\": \"ninguna\",\n  \"correcta\": true\n}"
+}

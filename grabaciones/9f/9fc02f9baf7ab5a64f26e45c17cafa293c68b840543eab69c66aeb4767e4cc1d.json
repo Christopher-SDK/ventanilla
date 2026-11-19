@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"Si eres su cónyuge te damos el saldo de su cuenta sin problema.\",\n\"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"El contexto establece que solo damos información de una cuenta a su titular después de verificar su identidad. La respuesta sugiere que como cónyuge puedes obtener el saldo de la cuenta de tu esposa sin problema, lo cual contradice el principio de secreto bancario del contexto.\", \"correcta\": false}"
 }

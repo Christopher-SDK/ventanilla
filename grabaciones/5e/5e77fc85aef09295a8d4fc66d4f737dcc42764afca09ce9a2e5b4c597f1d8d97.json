@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"You can submit a claim in this chat, at any agency, by phone, or in the Virtual Claims Book.\",\n    \"Submitting a claim does not require a lawyer and there is no cost.\",\n    \"When you register, you receive a claim code to track your claim.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"You can submit a complaint in this chat, at any agency, by phone, or in the Virtual Complaint Book.\",\n    \"Submitting a complaint is free of charge and you do not need a lawyer.\",\n    \"When you register, you receive a complaint code to track your complaint.\"\n  ]\n}"
 }

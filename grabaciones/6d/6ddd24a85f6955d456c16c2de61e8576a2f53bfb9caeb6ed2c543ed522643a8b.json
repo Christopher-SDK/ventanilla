@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"Transferencias entre cuentas del mismo banco tienen un costo de S/ 0,00.\",\n    \"Transferencias interbancarias diferidas (CCE) cuestan S/ 3,50.\",\n    \"Las transferencias interbancarias diferidas (CCE) llegan el mismo día hábil si se envían antes de las 15:00.\",\n    \"Las transferencias interbancarias inmediatas cuestan S/ 7,00.\",\n    \"Las transferencias interbancarias inmediatas llegan en segundos, todos los días.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"Transferencias entre cuentas del mismo banco tienen un costo de S/ 0,00.\",\n    \"Transferencias interbancarias diferidas (CCE) cuestan S/ 3,50.\",\n    \"Las transferencias interbancarias diferidas (CCE) suelen llegar el mismo día hábil si se envían antes de las 15:00.\",\n    \"Transferencias interbancarias inmediatas cuestan S/ 7,00.\",\n    \"Las transferencias interbancarias inmediatas suelen llegar en segundos, todos los días.\"\n  ]\n}"
 }

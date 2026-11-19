@@ -7,7 +7,7 @@ pytest.importorskip("deepeval", reason="instala el extra: uv sync --extra evals"
 def test_el_juez_nunca_aprueba_una_respuesta_mala_y_coincide_con_las_etiquetas(metricas):
     from evals.juez.juez import calibrar
 
-    r = calibrar(nombre="ambos")  # fidelidad Y rúbrica (docs/hallazgos.md, 16)
+    r = calibrar(nombre="tres")  # rúbrica, rúbrica razonada y fidelidad (docs/hallazgos.md, 16 y 19)
     malas_aprobadas = [d["id"] for d in r["detalle"] if not d["etiqueta"] and d["juez"]]
     buenas_rechazadas = [d["id"] for d in r["detalle"] if d["etiqueta"] and not d["juez"]]
     metricas["juez"] = {**{k: r[k] for k in ("juez", "metrica", "n", "acuerdo", "kappa")},

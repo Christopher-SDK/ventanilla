@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"No hay ninguna contradicción en la respuesta con respecto al contexto proporcionado.\", \"correcta\": true}"
+ "respuesta": "{\"contradiccion\": \"Me pueden pedir el código SMS para validar tu identidad.\", \"correcta\": false}"
 }

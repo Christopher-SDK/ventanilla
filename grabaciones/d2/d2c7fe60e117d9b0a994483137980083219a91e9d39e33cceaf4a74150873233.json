@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"claims\": [\n    \"You can present a complaint by phone.\",\n    \"You can do this through this chat or the Virtual Complaints Booklet [source: reclamos].\",\n    \"You do not need a lawyer and it is free of charge [source: reclamos].\",\n    \"When you register, you receive a complaint code to track it [source: reclamos].\"\n  ]\n}"
+ "respuesta": "{\n  \"claims\": [\n    \"You can present a complaint by phone. You can do so in this chat or in the Virtual Complaint Booklet [source: reclamos].\",\n    \"You do not need a lawyer and it is free of charge [source: reclamos].\",\n    \"When you register, you receive a complaint code to track it [source: reclamos].\"\n  ]\n}"
 }

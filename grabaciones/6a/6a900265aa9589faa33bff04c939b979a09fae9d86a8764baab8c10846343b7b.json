@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"Los asesores atienden de lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00, no de lunes a domingo de 8:00 a 22:00 como dice la respuesta.\", \"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"Los asesores atienden de lunes a domingo de 8:00 a 22:00.\", \"correcta\": false}"
 }

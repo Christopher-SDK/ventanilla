@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"La afirmación de la respuesta que dice: 'Para solicitar el borrado de tus datos personales, debes presentar un reclamo en la Plataforma de Atención al Usuario de la SBS o a Indecopi.' no está directamente respaldada por el contexto proporcionado. El contexto menciona los derechos ARCO (Acceso, Rectificación, Cancepción o Oposición) y que puedes hacerlo en cualquier agencia o por el formulario de privacidad de la web, pero no especifica la Plataforma de Atención al Usuario de la SBS o Indecopi.\",\n\"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"La afirmación de la respuesta que dice que para solicitar el borrado de tus datos personales debes presentar un reclamo en la Plataforma de Atención al Usuario de la SBS o a Indecopi no está respaldada por el contexto proporcionado. El contexto menciona derechos ARCO (Acceso, Rectificación, Cancepción o Oposición) pero no especifica la plataforma o agencia exacta a través de la cual se debe presentar la solicitud de borrado.\", \"correcta\": false}"
 }

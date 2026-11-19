@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"The text mentions that you can request an advisor by writing 'asesor'.\",\n    \"The operating hours for advisors are specified as Monday to Friday from 9:00 to 18:00, and Saturdays from 9:00 to 13:00.\",\n    \"If you request an advisor outside of these hours, the case will be left registered and you will be contacted on the next business day.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"The text mentions that you can request an advisor by writing 'asesor'.\",\n    \"The operating hours for advisors are specified as Monday to Friday from 9:00 to 18:00, and Saturdays from 9:00 to 13:00.\",\n    \"If you contact an advisor outside of these hours, your case will be registered and you will be contacted the next business day.\"\n  ]\n}"
 }

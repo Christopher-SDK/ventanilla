@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
+ "respuesta": "{\"contradiccion\": \"Los derechos ARCO no son los derechos a recibir intereses, reclamar comisiones, cancelar la cuenta y obtener préstamos. Según el contexto oficial, los derechos ARCO se refieren a derechos específicos como el acceso, la rectificación, la cancelación o la oposición al uso de tus datos personales bajo la Ley 29733 y su reglamento (DS 016-2024-JUS).\", \"correcta\": false}"
 }

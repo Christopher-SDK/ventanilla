@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"The bank provides privacy and security for its clients.\",\n    \"Only the account holder can receive information about their account after verifying their identity due to banking secrecy.\",\n    \"There is a monthly maintenance fee of S/5.00 for savings accounts if the average monthly balance is less than S/1,000.00.\",\n    \"Salaried accounts have no maintenance cost.\",\n    \"There is a fee of S/4.00 for a physical statement, while the digital statement is free.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"The bank provides privacy and security for its clients.\",\n    \"Only the account holder can receive information about a bank account after verifying their identity due to banking secrecy.\",\n    \"There is a monthly maintenance fee of S/5.00 for savings accounts if the average monthly balance is less than S/1,000.00.\",\n    \"Salaried account maintenance is free of charge.\",\n    \"There is a fee of S/4.00 for a physical statement of account, while the digital statement is free.\"\n  ]\n}"
 }

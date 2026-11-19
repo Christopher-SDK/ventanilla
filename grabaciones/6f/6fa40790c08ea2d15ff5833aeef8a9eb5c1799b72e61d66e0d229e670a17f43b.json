@@ -1,0 +1,48 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nTarifario de comisiones. ## Transferencias\n\n- Transferencia entre cuentas del mismo banco: sin costo.\n- Transferencia interbancaria diferida (CCE): S/ 3,50. Llega el mismo día hábil si se envía antes de las 15:00.\n- Transferencia interbancaria inmediata: S/ 7,00. Llega en segundos, todos los días.\n\nPREGUNTA: ¿Hasta qué hora debo enviar una transferencia diferida para que llegue el mismo día?\nRESPUESTA: Para que la transferencia interbancaria diferida (CCE) llegue el mismo día hábil, debes enviarla antes de las 15:00.\n\nEscribe, en este orden:\n- «el_contexto_dice»: qué responde el CONTEXTO a la PREGUNTA, en una oración.\n- «la_respuesta_dice»: qué responde la RESPUESTA, en una oración.\n- «contradiccion»: lo que la RESPUESTA afirma y el CONTEXTO contradice o no dice (montos, plazos, horarios, a dónde acudir,\n  si atiende una persona o un asistente, condiciones), o «ninguna». Negarse a dar un dato u ofrecer un asesor no es contradicción.\n- «correcta»: true solo si escribiste «ninguna»."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "el_contexto_dice": {
+     "title": "El Contexto Dice",
+     "type": "string"
+    },
+    "la_respuesta_dice": {
+     "title": "La Respuesta Dice",
+     "type": "string"
+    },
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "el_contexto_dice",
+    "la_respuesta_dice",
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Razonado",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"el_contexto_dice\": \"Para que la transferencia interbancaria diferida (CCE) llegue el mismo día hábil, debes enviarla antes de las 15:00.\",\n  \"la_respuesta_dice\": \"Para que la transferencia interbancaria diferida (CCE) llegue el mismo día hábil, debes enviarla antes de las 15:00.\",\n  \"contradiccion\": \"ninguna\",\n  \"correcta\": true\n}"
+}

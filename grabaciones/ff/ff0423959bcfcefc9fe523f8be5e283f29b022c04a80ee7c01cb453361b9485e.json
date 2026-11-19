@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"RESPUESTA: Por tu edad, el banco te responde en 5 días hábiles.\", \"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"El plazo de respuesta del banco es de 15 días hábiles, no 5 días hábiles como sugiere la respuesta.\", \"correcta\": false}"
 }

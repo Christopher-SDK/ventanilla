@@ -101,3 +101,17 @@ Al etiquetar a mano las respuestas reales para ampliar la calibración, el model
 ## 18. El monto existía en el tarifario, pero era de otra comisión
 El nocturno, con el modelo en vivo en Linux, respondió a «¿Cuál es la comisión por pago de servicios en ventanilla?» (fuera del tarifario): «La comisión por pago de servicios en ventanilla es S/ 5,00 al mes». S/ 5,00 es el mantenimiento de la cuenta de ahorros. El verificador lo dejó pasar porque solo comprobaba que el monto apareciera en alguna fuente recuperada.
 **Cambio:** cada monto tiene que compartir su concepto con la línea de la fuente de donde sale (la oración que lo dice o la pregunta del cliente), sin contar palabras genéricas como «comisión» o «costo». La respuesta del nocturno quedó como prueba de regresión. Lo encontró la prueba de fuera de alcance, que con las grabaciones de la Mac pasaba.
+
+## 19. En Linux, el juez de fidelidad leía «ITF» como la federación de tenis
+Con 47 casos, la combinación de fidelidad y rúbrica (16) dio κ 0,57 en el nocturno: rechazó 10 respuestas buenas. Se midió cada juez caso por caso en el mismo Linux de GitHub, dos vueltas. La FaithfulnessMetric de DeepEval traduce al inglés con el juez pequeño y ahí inventa: «The ITF (International Tennis Federation) is the organization that pays…», o toma la cita «[fuente: itf]» como una afirmación. La rúbrica acertaba más (κ 0,92), pero aprobaba dos respuestas malas: «ya no hay otra instancia» y «estás hablando con un asesor humano».
+Al grabar las llamadas en Linux apareció otra falla, de la grabadora: la misma petición puede responder distinto dentro de una corrida, y la grabación de la segunda respuesta pisaba a la primera. Las llamadas que ya dependían de la primera dejaban de reproducirse.
+**Cambio:** el juez pasa a ser tres a la vez, y una respuesta pasa solo si los tres la aprueban: la rúbrica, una rúbrica que antes escribe qué dice el contexto y qué dice la respuesta (sin las citas), y la fidelidad con umbral 0,5. Al grabar, la primera respuesta a cada petición se queda. Las llamadas del juez se graban en Linux, donde corren la CI y el nocturno.
+
+| Juez (47 casos) | κ Linux | Malas aprobadas Linux | κ Mac | Malas aprobadas Mac |
+|---|---|---|---|---|
+| Fidelidad y rúbrica (16) | 0,57 | 0 | 0,70 | 0 |
+| Rúbrica sola | 0,92 | 2 | 0,83 | 3 |
+| Rúbrica razonada sola | 0,96 | 1 | 0,96 | 1 |
+| **Los tres a la vez** | **0,92** | **0** | **0,87** | **0** |
+
+Cada juez por separado aprobó alguna respuesta mala en alguna de las dos máquinas; los tres juntos, ninguna en ninguna. Las etiquetas y el criterio (κ ≥ 0,6 y cero malas aprobadas) no se tocaron.

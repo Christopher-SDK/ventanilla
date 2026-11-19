@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"claims\": [\n    \"If a bank erroneously reverses an operation, it must return the ITF (which stands for Impuesto sobre Transmisiones Fiscales, or Value Added Tax in Spanish) that was charged in that operation.\"\n  ]\n}"
+ "respuesta": "{\n  \"claims\": [\n    \"If a bank erroneously reverses an operation, it must return the ITF (which stands for Impuesto de Traslado Financiero, or Financial Transfer Tax) that was charged on that operation.\"\n  ]\n}"
 }

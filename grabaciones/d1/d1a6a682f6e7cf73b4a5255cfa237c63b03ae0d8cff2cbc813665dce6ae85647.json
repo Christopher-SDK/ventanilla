@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"No necesitas un abogado y no tiene costo [fuente: reclamos].\", \"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
 }

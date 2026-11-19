@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"The bank will never ask you for your internet password, card password, token, or verification code sent via SMS through chat, email, SMS, or phone call.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"The bank will never ask you for your internet account key via chat, email, SMS, or phone call.\",\n    \"The bank will never ask you for your card key, token, or the verification code sent to you via SMS.\"\n  ]\n}"
 }

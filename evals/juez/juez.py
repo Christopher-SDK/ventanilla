@@ -4,6 +4,7 @@ El juez es de otra familia que el modelo que redacta (qwen): reduce la preferenc
 """
 import json
 import os
+import re
 from pathlib import Path
 
 import httpx
@@ -107,12 +108,71 @@ class AmbosJueces:
         return self.score
 
 
+_CITA = re.compile(r"\s*\[[^\]]{1,80}\]")
+
+
+def sin_citas(texto: str) -> str:
+    """Las citas las revisa el verificador; al juez solo lo confunden («esta información sale de la fuente itf» no es un dato)."""
+    return _CITA.sub("", texto).strip()
+
+
+class Razonado(BaseModel):
+    el_contexto_dice: str
+    la_respuesta_dice: str
+    contradiccion: str
+    correcta: bool
+
+
+RAZONADA = """Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.
+
+CONTEXTO:
+{contexto}
+
+PREGUNTA: {pregunta}
+RESPUESTA: {respuesta}
+
+Escribe, en este orden:
+- «el_contexto_dice»: qué responde el CONTEXTO a la PREGUNTA, en una oración.
+- «la_respuesta_dice»: qué responde la RESPUESTA, en una oración.
+- «contradiccion»: lo que la RESPUESTA afirma y el CONTEXTO contradice o no dice (montos, plazos, horarios, a dónde acudir,
+  si atiende una persona o un asistente, condiciones), o «ninguna». Negarse a dar un dato u ofrecer un asesor no es contradicción.
+- «correcta»: true solo si escribiste «ninguna»."""
+
+
+class RubricaRazonada:
+    """La rúbrica, pero escribiendo antes qué dice el contexto y qué dice la respuesta (docs/hallazgos.md, 19)."""
+
+    def __init__(self, juez: JuezGrabado):
+        self.juez, self.threshold = juez, 0.5
+
+    def measure(self, caso: LLMTestCase):
+        v = self.juez.generate(RAZONADA.format(contexto="\n\n".join(caso.context), pregunta=caso.input, respuesta=sin_citas(caso.actual_output)), Razonado)
+        self.score = 1.0 if v.correcta else 0.0
+        return self.score
+
+
+class TresJueces:
+    """Pasa solo si aprueban los tres: la rúbrica, la rúbrica razonada y la fidelidad de DeepEval (≥ 0,5).
+    Cada uno por separado aprobó alguna respuesta mala en la Mac o en Linux; juntos, ninguna en las dos máquinas."""
+
+    def __init__(self, juez: JuezGrabado):
+        self.jueces = [RubricaBinaria(juez), RubricaRazonada(juez),
+                       FaithfulnessMetric(model=juez, threshold=0.5, async_mode=False, include_reason=False)]
+        self.threshold = 0.5
+
+    def measure(self, caso: LLMTestCase):
+        self.score = 1.0 if all(j.measure(caso) >= j.threshold for j in self.jueces) else 0.0
+        return self.score
+
+
 def metricas(juez: JuezGrabado) -> dict:
     return {
         "geval": lambda: metrica(juez),
         "fidelidad": lambda: FaithfulnessMetric(model=juez, threshold=0.99, async_mode=False, include_reason=False),
         "rubrica": lambda: RubricaBinaria(juez),
         "ambos": lambda: AmbosJueces(juez),
+        "razonada": lambda: RubricaRazonada(juez),
+        "tres": lambda: TresJueces(juez),
     }
 
 

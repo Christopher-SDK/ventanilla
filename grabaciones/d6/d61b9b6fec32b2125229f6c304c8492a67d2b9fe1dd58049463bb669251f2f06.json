@@ -1,0 +1,48 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nReclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas.\n\nReclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento.\n\nPREGUNTA: No estoy de acuerdo con la respuesta a mi reclamo, ¿qué hago?\nRESPUESTA: Puedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi para presentar un reclamo. No necesitas un abogado y no tiene costo. El banco responde en un plazo máximo de 15 días hábiles desde que se presenta el reclamo.\n\nEscribe, en este orden:\n- «el_contexto_dice»: qué responde el CONTEXTO a la PREGUNTA, en una oración.\n- «la_respuesta_dice»: qué responde la RESPUESTA, en una oración.\n- «contradiccion»: lo que la RESPUESTA afirma y el CONTEXTO contradice o no dice (montos, plazos, horarios, a dónde acudir,\n  si atiende una persona o un asistente, condiciones), o «ninguna». Negarse a dar un dato u ofrecer un asesor no es contradicción.\n- «correcta»: true solo si escribiste «ninguna»."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "el_contexto_dice": {
+     "title": "El Contexto Dice",
+     "type": "string"
+    },
+    "la_respuesta_dice": {
+     "title": "La Respuesta Dice",
+     "type": "string"
+    },
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "el_contexto_dice",
+    "la_respuesta_dice",
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Razonado",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"el_contexto_dice\": \"Puedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi para presentar un reclamo. No necesitas un abogado y no tiene costo. El banco responde en un plazo máximo de 15 días hábiles desde que se presenta el reclamo.\",\n  \"la_respuesta_dice\": \"No estás de acuerdo con la respuesta a tu reclamo, puedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi para presentar un reclamo.\",\n  \"contradiccion\": \"ninguna\",\n  \"correcta\": true\n}"
+}

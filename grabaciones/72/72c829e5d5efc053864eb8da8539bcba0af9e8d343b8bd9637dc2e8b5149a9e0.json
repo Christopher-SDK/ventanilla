@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"There are platforms like the SBS User Attention Platform or Indecopi where you can lodge complaints if you disagree with a response.\",\n    \"You can present a complaint through this chat, at any agency, by phone, or in the Virtual Complaint Book. No lawyer is required, and there is no cost.\",\n    \"When you register a complaint, you receive a complaint code to track its status.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"There are platforms like the SBS User Assistance Platform and Indecopi where you can lodge complaints if you are not satisfied with the response.\",\n    \"You can present a complaint through this chat, at any agency, by phone, or in the Virtual Complaint Book. You do not need a lawyer and there is no cost.\",\n    \"When you register a complaint, you receive a complaint code to track its status.\"\n  ]\n}"
 }

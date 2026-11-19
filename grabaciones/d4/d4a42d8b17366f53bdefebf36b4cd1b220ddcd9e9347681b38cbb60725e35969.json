@@ -1,0 +1,48 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Eres auditor de un banco. Decide si la RESPUESTA es correcta según el CONTEXTO oficial.\n\nCONTEXTO:\nImpuesto a las Transacciones Financieras (ITF). El ITF es un impuesto creado por ley (TUO de la Ley 28194). No es una comisión del banco: el banco solo lo cobra y lo entrega al Estado.\n\nImpuesto a las Transacciones Financieras (ITF). ## Reversos\n\nSi el banco revierte una operación por error, también devuelve el ITF que se cobró en ella.\n\nPREGUNTA: ¿El ITF es una comisión del banco?\nRESPUESTA: No, el ITF no es una comisión del banco. Es un impuesto creado por ley que se paga quien envía el dinero.\n\nEscribe, en este orden:\n- «el_contexto_dice»: qué responde el CONTEXTO a la PREGUNTA, en una oración.\n- «la_respuesta_dice»: qué responde la RESPUESTA, en una oración.\n- «contradiccion»: lo que la RESPUESTA afirma y el CONTEXTO contradice o no dice (montos, plazos, horarios, a dónde acudir,\n  si atiende una persona o un asistente, condiciones), o «ninguna». Negarse a dar un dato u ofrecer un asesor no es contradicción.\n- «correcta»: true solo si escribiste «ninguna»."
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "el_contexto_dice": {
+     "title": "El Contexto Dice",
+     "type": "string"
+    },
+    "la_respuesta_dice": {
+     "title": "La Respuesta Dice",
+     "type": "string"
+    },
+    "contradiccion": {
+     "title": "Contradiccion",
+     "type": "string"
+    },
+    "correcta": {
+     "title": "Correcta",
+     "type": "boolean"
+    }
+   },
+   "required": [
+    "el_contexto_dice",
+    "la_respuesta_dice",
+    "contradiccion",
+    "correcta"
+   ],
+   "title": "Razonado",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"el_contexto_dice\": \"El ITF no es una comisión del banco; es un impuesto creado por ley que se paga por quien envía el dinero.\",\n  \"la_respuesta_dice\": \"No, el ITF no es una comisión del banco.\",\n  \"contradiccion\": \"ninguna\",\n  \"correcta\": true\n}"
+}

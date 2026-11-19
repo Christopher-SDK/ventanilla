@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"Este chat es un asistente virtual con inteligencia artificial.\",\n    \"Puedes pedir un asesor en cualquier momento escribiendo «asesor».\",\n    \"El horario de asesores es lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00.\",\n    \"Fuera de ese horario el caso se deja registrado y se te contacta el siguiente día hábil.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"The chat is described as a virtual assistant with artificial intelligence.\",\n    \"It advises users to confirm financial decisions with a human advisor.\",\n    \"Human advisors are available Monday to Friday from 9:00 AM to 6:00 PM and on Saturdays from 9:00 AM to 1:00 PM.\",\n    \"Outside of these hours, cases are left registered and the user will be contacted the next business day.\"\n  ]\n}"
 }

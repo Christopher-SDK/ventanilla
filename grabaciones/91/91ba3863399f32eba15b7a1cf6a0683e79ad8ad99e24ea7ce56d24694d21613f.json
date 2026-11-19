@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
+ "respuesta": "{\"contradiccion\": \"PREGUNTA: ¿Qué hago si alguien me pide mi token? RESPUESTA: Compártelo solo si la persona dice ser del banco.\", \"correcta\": false}"
 }

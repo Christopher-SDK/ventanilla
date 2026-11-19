@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"Debes enviarla antes de las 12:00 para que llegue el mismo día. (El contexto dice que debe ser antes de las 15:00.)\", \"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"La respuesta indica enviar la transferencia antes de las 12:00, mientras que el contexto establece que para una transferencia interbancaria diferida (CCE) debe enviarse antes de las 15:00 para llegar el mismo día hábil.\", \"correcta\": false}"
 }

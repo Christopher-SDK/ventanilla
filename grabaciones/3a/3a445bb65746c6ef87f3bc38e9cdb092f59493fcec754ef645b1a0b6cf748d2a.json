@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"ninguna\", \"correcta\": true}"
+ "respuesta": "{\"contradiccion\": \"\", \"correcta\": true}"
 }

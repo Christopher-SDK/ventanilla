@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"No necesarias condiciones o plazos específicos para presentar un reclamo según el contexto proporcionado.\", \"correcta\": true}"
+ "respuesta": "{\"contradiccion\": \"No necesarias condiciones o montos específicos para presentar un reclamo según el contexto proporcionado.\", \"correcta\": true}"
 }

@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"Primero escribe en \\\"contradiccion\\\" la afirmación de la respuesta que contradice el contexto o que el contexto no dice (montos, plazos, horarios, quién paga, condiciones). Si no hay ninguna, escribe \\\"ninguna\\\".\", \"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"acercarte a una agencia en horario de oficina\", \"correcta\": false}"
 }

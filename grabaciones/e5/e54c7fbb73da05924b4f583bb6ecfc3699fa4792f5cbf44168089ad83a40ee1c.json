@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"El contexto dice que el ITF (Impuesto a las Transacciones Financieras) lo paga quien envía el dinero, no quien recibe la transferencia. Por lo tanto, la respuesta indicando que el ITF lo paga quien recibe el dinero es incorrecta.\", \"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"quién paga\", \"correcta\": false}"
 }

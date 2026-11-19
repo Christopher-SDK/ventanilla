@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"claims\": [\n    \"The ITF (International Tennis Federation) is the organization that gets paid when a transfer is sent.\"\n  ]\n}"
+ "respuesta": "{\n  \"claims\": [\n    \"The ITF (International Tennis Federation) is the governing body for tennis.\"\n  ]\n}"
 }

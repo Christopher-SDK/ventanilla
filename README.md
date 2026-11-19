@@ -29,7 +29,7 @@ git clone https://github.com/Christopher-SDK/ventanilla.git
 cd ventanilla
 uv sync --all-extras
 uv run playwright install chromium
-uv run pytest            # 284 pruebas, 0 fallas, ~10 s
+uv run pytest            # 285 pruebas, 0 fallas, ~10 s
 ```
 
 En un clon recién hecho verás `280 passed, 2 skipped`: las 2 de `tests/web/test_datos_web.py` leen el reporte que escribe `scripts/matriz.py` y se activan después de correrlo (sin Node, también se omiten las de paridad).
@@ -80,7 +80,7 @@ Abre http://localhost:8080. También puedes usar Docker: `docker compose up --bu
 | Privacidad | Secreto bancario entre clientes, tachado en reclamos y salidas | pytest | Ley 29733; DS 016-2024-JUS |
 | Regulación | Reclamos con código y 15 días hábiles, aviso de IA, asesor humano, crédito nunca aprobado, contrato del prompt | pytest | Res. SBS 4036-2022; DS 115-2025-PCM arts. 24, 25, 31 |
 | Modelo real | Set dorado, fuera de alcance, metamórficas, sesgo contrafactual, determinismo, inyección con el modelo real | pytest + grabaciones; intervalo de Wilson | NIST AI 600-1; ISO/IEC 25059 (robustez) |
-| Juez LLM | Calibrado con 47 etiquetas: κ ≥ 0,6 y cero respuestas malas aprobadas | DeepEval (fidelidad) + rúbrica binaria, con granite4.1 | Shankar et al. 2024; Zheng et al. 2023 |
+| Juez LLM | Calibrado con 47 etiquetas: κ ≥ 0,6 y cero respuestas malas aprobadas | DeepEval (fidelidad) + dos rúbricas binarias, con granite4.1 | Shankar et al. 2024; Zheng et al. 2023 |
 | API y contrato | RFC 9457, límite por IP, sesiones, SSE verificado, fuzzing del OpenAPI | pytest, Schemathesis | OWASP LLM06:2026 (consumo sin límite) |
 | Interfaz | XSS desde la salida del modelo, axe (claro/oscuro), teclado, reflow 320 px, objetivos 24 px | Playwright, axe-core | WCAG 2.2 (1.3.1, 1.4.10, 2.5.8, 4.1.3) |
 | Arquitectura | El dominio no conoce adaptadores ni la red; las fallas solo se cablean en la configuración | import-linter | — |
@@ -99,7 +99,7 @@ Esto no salió del diseño inicial: lo encontraron las propias pruebas. El detal
 - **Sesgo contrafactual.** Con «Soy Wilber, vivo en Puno y hablo quechua» o «Soy Carlos, venezolano», el modelo repetía la pregunta o se negaba a responder, aunque la búsqueda le daba los mismos documentos que a los demás. Se probaron tres formatos de mensaje y ganó el del mensaje entre etiquetas: pasó de 16/18 a 18/18, con 0 ecos.
 - **El modelo dijo que la cuenta sueldo tiene costo** (es gratis), y lo repitió con las 5 semillas. Las tarifas pasaron a salir del tarifario estructurado y ya no del modelo.
 - **El juez G-Eval aprobaba 7 de 12 respuestas incorrectas** (κ 0,42). Se midieron tres opciones y quedó la que no aprueba ninguna mala: fidelidad de DeepEval, κ 0,75.
-- **En Linux el juez bajó a κ 0,583.** La misma calibración daba otro resultado en otro hardware. Las etiquetas pasaron de 24 a 47 y la fidelidad se combinó con una rúbrica binaria: κ 0,657, sin ninguna respuesta mala aprobada. El criterio no se tocó.
+- **En Linux el juez leía «ITF» como la federación de tenis.** La fidelidad de DeepEval traduce al inglés con un juez pequeño y ahí inventa. Se midió cada juez caso por caso en el Linux de GitHub: ahora pasan solo las respuestas que aprueban tres jueces a la vez, κ 0,92 en Linux y 0,87 en la Mac, sin ninguna mala aprobada en ninguna. El criterio no se tocó.
 - **Un monto real, en la comisión equivocada.** En vivo, el modelo dijo que el pago de servicios cuesta S/ 5,00: es el mantenimiento de la cuenta de ahorros. El verificador ahora ata cada monto al concepto de la línea de donde sale.
 - **El modelo mandaba a la SBS a quien pedía borrar sus datos** (eso es un derecho ARCO ante el banco). Se ajustó el corte por relevancia y el caso entró al set dorado.
 - **La búsqueda híbrida rendía menos que los embeddings solos** (MRR 0,944 frente a 0,983). BM25 quedó solo como señal de abstención, y la ablación sigue en la suite.

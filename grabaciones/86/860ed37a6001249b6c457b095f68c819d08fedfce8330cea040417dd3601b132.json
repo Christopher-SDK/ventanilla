@@ -34,5 +34,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\"contradiccion\": \"No, si el banco revierte una operación, el ITF cobrado no se devuelve porque ya se entregó al Estado.\", \"correcta\": false}"
+ "respuesta": "{\"contradiccion\": \"Si el banco revierte una operación, el ITF cobrado no se devuelve porque ya se entregó al Estado.\", \"correcta\": false}"
 }

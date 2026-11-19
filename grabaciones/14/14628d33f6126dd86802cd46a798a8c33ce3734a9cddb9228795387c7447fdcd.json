@@ -32,5 +32,5 @@
    "type": "object"
   }
  },
- "respuesta": "{\n  \"truths\": [\n    \"El banco debe responder a un reclamo dentro de un plazo máximo de 15 días hábiles desde que se presenta (Res. SBS 4036-2022).\",\n    \"En casos excepcionales, como cuando se necesita una respuesta de un tercero, el plazo de respuesta puede extenderse, y el banco debe avisar antes de que el plazo vence con el motivo de la extensión.\",\n    \"Los reclamos pueden presentarse a través de este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual.\",\n    \"No es necesario contratar un abogado para presentar un reclamo, y no hay costo asociado con la presentación.\",\n    \"Al registrar un reclamo, se recibe un código de reclamo para hacer el seguimiento del mismo.\"\n  ]\n}"
+ "respuesta": "{\n  \"truths\": [\n    \"El banco debe responder a un reclamo dentro de un plazo máximo de 15 días hábiles desde que se presenta (Res. SBS 4036-2022).\",\n    \"En casos excepcionales, como cuando se necesita la respuesta de un tercero, el plazo de respuesta puede ser extendido, y el banco debe avisar al reclamante antes de que el plazo vence, indicando el motivo.\"\n  ]\n}"
 }
