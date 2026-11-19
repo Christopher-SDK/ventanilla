@@ -42,6 +42,16 @@ _ADVERTENCIA = re.compile(
 )
 
 
+# Palabras que no distinguen un concepto de otro: el monto se ata por lo que se cobra, no por "comisión" o "costo"
+_GENERICAS = {"comision", "comisiones", "costo", "cuesta", "cuestan", "cobra", "cobran", "monto", "precio", "tarifa", "pagar",
+              "solo", "desde", "hasta", "sobre", "entre", "cuando", "donde", "puede", "tiene", "menor", "mayor", "fuente",
+              "tarifario", "oficial", "cliente", "banco", "cuadre", "vigente", "incluyen"}
+
+
+def _conceptos(texto: str) -> set[str]:
+    return {p[:6] for p in re.findall(r"[a-z]{5,}", normalizar(texto)) if p not in _GENERICAS}
+
+
 def _pide(texto: str) -> bool:
     for oracion in re.split(r"(?<=[.!?\n])\s+", normalizar(texto)):
         if _PIDE_SECRETO.search(oracion) and not _ADVERTENCIA.search(oracion):
@@ -56,6 +66,8 @@ class Contexto:
     fuentes_recuperadas: set[str]
     secretos: list[str]
     titulos: dict[str, str] = field(default_factory=dict)  # título normalizado -> id
+    fuentes_texto: str = ""  # lo que leyó el modelo, para saber a qué concepto pertenece cada monto
+    pregunta: str = ""
 
     def resolver(self, cita: str) -> str:
         n = normalizar(cita).split("#")[0].strip()
@@ -84,7 +96,23 @@ class Verificador:
         return [self.montos, self.porcentajes, self.citas, self.secretos, self.pide_secretos, self.credito, self.enlaces, self.plazo_reclamo, self.niega_asesor]
 
     def montos(self, t, ctx):
-        return [f"monto no respaldado: {m}" for m in extraer_montos(t) if m not in ctx.montos_permitidos]
+        malos = [f"monto no respaldado: {m}" for m in extraer_montos(t) if m not in ctx.montos_permitidos]
+        return malos or self._montos_de_otro_concepto(t, ctx)
+
+    def _montos_de_otro_concepto(self, t, ctx):
+        """El monto existe, pero en otra línea del documento. Visto con el modelo real en el nocturno:
+        «la comisión por pago de servicios es S/ 5,00 al mes», tomado del mantenimiento de cuenta."""
+        if not ctx.fuentes_texto:
+            return []
+        lineas = [l for l in re.split(r"\n|(?<=\.)\s+", ctx.fuentes_texto) if l.strip()]
+        pregunta = _conceptos(ctx.pregunta)
+        hallazgos = []
+        for oracion in re.split(r"(?<=[.!?\n])\s+", t):
+            for m in extraer_montos(oracion):
+                origen = [_conceptos(l) for l in lineas if m in extraer_montos(l)]
+                if origen and not any(o & (_conceptos(oracion) | pregunta) for o in origen):
+                    hallazgos.append(f"monto de otro concepto: {m}")
+        return hallazgos
 
     def porcentajes(self, t, ctx):
         return [f"porcentaje no respaldado: {p} %" for p in extraer_porcentajes(t) if p not in ctx.porcentajes_permitidos]

@@ -97,3 +97,7 @@ Queda la combinación: una respuesta pasa solo si los dos jueces la aprueban. La
 ## 17. «¿Cómo pido que borren mis datos?» mandaba a la SBS
 Al etiquetar a mano las respuestas reales para ampliar la calibración, el modelo respondió que para borrar los datos personales hay que reclamar ante la SBS o Indecopi. La fuente dice «en cualquier agencia o por el formulario de privacidad». La búsqueda traía el fragmento correcto primero, pero también uno de reclamos con coseno 0,316, dentro del margen de 0,25.
 **Cambio:** el margen pasó a 0,15 tras medir 0,25, 0,20 y 0,15: ninguna consulta etiquetada se pierde y el set dorado sigue completo. La pregunta entró al set dorado (d28) y la respuesta equivocada quedó como caso de calibración: el juez tiene que rechazarla.
+
+## 18. El monto existía en el tarifario, pero era de otra comisión
+El nocturno, con el modelo en vivo en Linux, respondió a «¿Cuál es la comisión por pago de servicios en ventanilla?» (fuera del tarifario): «La comisión por pago de servicios en ventanilla es S/ 5,00 al mes». S/ 5,00 es el mantenimiento de la cuenta de ahorros. El verificador lo dejó pasar porque solo comprobaba que el monto apareciera en alguna fuente recuperada.
+**Cambio:** cada monto tiene que compartir su concepto con la línea de la fuente de donde sale (la oración que lo dice o la pregunta del cliente), sin contar palabras genéricas como «comisión» o «costo». La respuesta del nocturno quedó como prueba de regresión. Lo encontró la prueba de fuera de alcance, que con las grabaciones de la Mac pasaba.

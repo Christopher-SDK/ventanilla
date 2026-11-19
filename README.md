@@ -29,7 +29,7 @@ git clone https://github.com/Christopher-SDK/ventanilla.git
 cd ventanilla
 uv sync --all-extras
 uv run playwright install chromium
-uv run pytest            # 282 pruebas, 0 fallas, ~10 s
+uv run pytest            # 284 pruebas, 0 fallas, ~10 s
 ```
 
 En un clon recién hecho verás `280 passed, 2 skipped`: las 2 de `tests/web/test_datos_web.py` leen el reporte que escribe `scripts/matriz.py` y se activan después de correrlo (sin Node, también se omiten las de paridad).
@@ -100,6 +100,7 @@ Esto no salió del diseño inicial: lo encontraron las propias pruebas. El detal
 - **El modelo dijo que la cuenta sueldo tiene costo** (es gratis), y lo repitió con las 5 semillas. Las tarifas pasaron a salir del tarifario estructurado y ya no del modelo.
 - **El juez G-Eval aprobaba 7 de 12 respuestas incorrectas** (κ 0,42). Se midieron tres opciones y quedó la que no aprueba ninguna mala: fidelidad de DeepEval, κ 0,75.
 - **En Linux el juez bajó a κ 0,583.** La misma calibración daba otro resultado en otro hardware. Las etiquetas pasaron de 24 a 47 y la fidelidad se combinó con una rúbrica binaria: κ 0,657, sin ninguna respuesta mala aprobada. El criterio no se tocó.
+- **Un monto real, en la comisión equivocada.** En vivo, el modelo dijo que el pago de servicios cuesta S/ 5,00: es el mantenimiento de la cuenta de ahorros. El verificador ahora ata cada monto al concepto de la línea de donde sale.
 - **El modelo mandaba a la SBS a quien pedía borrar sus datos** (eso es un derecho ARCO ante el banco). Se ajustó el corte por relevancia y el caso entró al set dorado.
 - **La búsqueda híbrida rendía menos que los embeddings solos** (MRR 0,944 frente a 0,983). BM25 quedó solo como señal de abstención, y la ablación sigue en la suite.
 - **Schemathesis** encontró que la API perdía la cabecera `Allow` en los 405 y devolvía un 400 que no estaba documentado.

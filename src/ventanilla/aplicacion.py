@@ -176,7 +176,8 @@ class Asistente:
 
         borrador = self.modelo.generar(mensajes, semilla)
         recuperadas = {f.doc_id for f, _, _ in hallados}
-        ctx = Contexto(montos, porcentajes, recuperadas, [self.canario, *self._frases_del_prompt()], self.titulos)
+        ctx = Contexto(montos, porcentajes, recuperadas, [self.canario, *self._frases_del_prompt()], self.titulos,
+                       fuentes_texto="\n".join(fuentes_txt) + "\n" + calculado, pregunta=mensaje)
         r = self.verificador.verificar(borrador, ctx)
         return Respuesta(r.texto, "respuesta" if r.aprobado else "bloqueo", fuentes=r.citas, hallazgos=r.hallazgos + quitado)
 

@@ -66,3 +66,20 @@ def test_no_bloquea_advertencias_y_datos_correctos(borrador):
 def test_tacha_datos_personales_en_lo_que_aprueba():
     r = revisar("Tu DNI 00001234 quedó registrado.")
     assert r.aprobado and "00001234" not in r.texto
+
+
+FUENTE = ("- Mantenimiento de cuenta de ahorros: S/ 5,00 al mes, solo si el saldo promedio del mes es menor a S/ 1 000,00.\n"
+          "- Retiro en cajero de otro banco: S/ 6,50 por cada retiro.")
+
+
+def test_bloquea_un_monto_real_puesto_en_otro_concepto():
+    """Visto con el modelo real en el nocturno: el monto existe en el tarifario, pero es de otra comisión."""
+    r = revisar("La comisión por pago de servicios en ventanilla es S/ 5,00 al mes [fuente: tarifario].",
+                montos_permitidos={500, 650, 100000}, fuentes_texto=FUENTE, pregunta="¿Cuál es la comisión por pago de servicios en ventanilla?")
+    assert not r.aprobado and "monto de otro concepto: 500" in r.hallazgos
+
+
+def test_aprueba_el_monto_si_la_pregunta_nombra_su_concepto():
+    r = revisar("Cuesta S/ 6,50 por cada vez [fuente: tarifario].",
+                montos_permitidos={500, 650, 100000}, fuentes_texto=FUENTE, pregunta="¿Cuánto cobran por retirar en un cajero de otro banco?")
+    assert r.aprobado
