@@ -69,3 +69,15 @@ En una prueba exploratoria con Docker y el modelo en vivo, «¿Puedo presentar u
 
 ## 12. garak
 1 528 ataques evaluados contra la API con el modelo en vivo (promptinject, base64, extracción del prompt de sistema): **0 exitosos**. Los probes DAN y de inyección latente quedaron en 0 evaluados porque superan los 1 000 caracteres y la API los rechaza con 422. Es una defensa, pero esos ataques no llegan a medirse.
+
+## 13. Enter enviaba con una respuesta pendiente
+Al grabar el video de la página demo con el modelo en vivo, dos respuestas se cruzaron: el botón «Enviar» se deshabilitaba, pero la tecla Enter lo saltaba. Además, la respuesta más nueva quedaba debajo de la caja de escritura fija (WCAG 2.4.11).
+**Cambio:** primero dos pruebas de interfaz que fallaron contra el defecto; después, la corrección (un estado «esperando» que Enter respeta y un margen igual al alto real de la caja).
+
+## 14. Un contrato que decía una cosa y hacía otra
+Schemathesis, de vez en cuando, generaba un mensaje hecho solo de espacios: válido según el esquema OpenAPI (`minLength: 1`) y rechazado por un validador aparte. Como dependía de lo que generara Hypothesis, la prueba fallaba al azar.
+**Cambio:** la regla «al menos un carácter visible» pasó al esquema (`pattern: \S`) y el fuzzing quedó determinista: una prueba que falla al azar no sirve.
+
+## 15. El reporte del modelo lo pisaban las corridas con fallas
+`reporte/modelo.json` lo escribía cada corrida de la suite, también las que encienden una falla. Después de la matriz, el archivo terminaba con las métricas del sistema roto, no del sano.
+**Cambio:** solo la corrida limpia escribe las métricas. Lo encontró la generación de datos de la página demo, que lee ese archivo.

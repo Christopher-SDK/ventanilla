@@ -29,6 +29,10 @@ def cumple(texto: str, caso: dict) -> bool:
 def metricas():
     datos: dict = {}
     yield datos
+    import os
+
+    if os.environ.get("VENTANILLA_FALLA"):  # con una falla encendida, las métricas no describen al sistema
+        return
     REPORTE.parent.mkdir(exist_ok=True)
     REPORTE.write_text(json.dumps(datos, ensure_ascii=False, indent=1))
 
