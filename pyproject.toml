@@ -1,7 +1,7 @@
 [project]
 name = "ventanilla"
 version = "0.1.0"
-description = "Add your description here"
+description = "Asistente RAG de un banco ficticio peruano con 7 fallas sembradas y la suite de QA que las atrapa"
 readme = "README.md"
 authors = [
     { name = "Christopher-SDK", email = "66187831+Christopher-SDK@users.noreply.github.com" }
@@ -27,7 +27,6 @@ build-backend = "uv_build"
 dev = [
     "allure-pytest>=2.16.2",
     "axe-playwright-python>=0.1.8",
-    "httpx2>=2.16.2",
     "hypothesis>=6.170.15",
     "import-linter>=2.17",
     "locust>=2.47.0",
@@ -43,7 +42,7 @@ testpaths = ["tests"]
 # El plugin de pytest de DeepEval imprime «Running teardown…» al cerrar; la suite usa sus métricas directamente.
 addopts = "-p no:deepeval"
 filterwarnings = ["error::pytest.PytestUnraisableExceptionWarning"]
-asyncio_default_fixture_loop_scope = "function"
+# IDs de prueba con tildes y «¿?» legibles en la salida (en vez de \u00e1…)
 disable_test_id_escaping_and_forfeit_all_rights_to_community_support = true
 
 [tool.importlinter]

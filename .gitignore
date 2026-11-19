@@ -20,7 +20,7 @@ web/hallazgos/
 web/datos/
 web/publico/sitemap.xml
 web/publico/robots.txt
-# web: archivos de trabajo locales (estudio, tablero, grabaciones crudas, herramientas de QA)
+# web: archivos de trabajo locales (estudio de referentes, progreso, grabaciones crudas, herramientas de QA)
 web/docs/
 web/progreso/
 web/activos/

@@ -1,5 +1,5 @@
 # docker compose up --build  →  http://localhost:8080 (o el puerto de VENTANILLA_PUERTO)
-# La primera vez descarga los modelos (~4,7 GB). En Mac, Docker no usa la GPU: si ya tienes Ollama instalado,
+# La primera vez descarga los modelos (~2,5 GB). En Mac, Docker no usa la GPU: si ya tienes Ollama instalado,
 # es más rápido con  OLLAMA_HOST=http://host.docker.internal:11434 docker compose up --build api
 services:
   ollama:
