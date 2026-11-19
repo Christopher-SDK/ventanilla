@@ -1,0 +1,30 @@
+:root{--fondo:#f6f7f9;--papel:#fff;--tinta:#16181d;--suave:#4a505c;--linea:#d5d9e0;--acento:#0b5cad;--ok:#0f7a3d;--alerta:#a3191f;color-scheme:light dark}
+@media (prefers-color-scheme:dark){:root{--fondo:#0e1014;--papel:#171a20;--tinta:#eef0f4;--suave:#b4bac6;--linea:#2c313b;--acento:#7fb4ff;--ok:#5fd394;--alerta:#ff8a8f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--tinta);font:16px/1.5 system-ui,sans-serif}
+.chat{max-width:760px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column;padding:16px}
+.cab{border-bottom:1px solid var(--linea);padding-bottom:12px}
+h1{margin:0;font-size:24px}
+.aviso{margin:4px 0 10px;color:var(--suave);font-size:14px}
+.cab-acc{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+button,select,summary{font:inherit;min-height:44px;min-width:44px;padding:8px 14px;border-radius:8px;border:1px solid var(--acento);background:var(--acento);color:var(--papel);cursor:pointer}
+button.sec,summary{background:transparent;color:var(--acento)}
+button:disabled{opacity:.6;cursor:wait}
+:focus-visible{outline:3px solid var(--acento);outline-offset:2px}
+.sesion form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+select{background:var(--papel);color:var(--tinta);border-color:var(--linea)}
+.log{list-style:none;margin:0;padding:16px 0;flex:1;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:85%;padding:10px 14px;border-radius:12px;background:var(--papel);border:1px solid var(--linea)}
+.msg p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg.cliente{align-self:flex-end;border-color:var(--acento)}
+.msg.bloqueo{border-color:var(--alerta)}
+.msg.reclamo{border-color:var(--ok)}
+.quien{display:block;font-size:13px;font-weight:600;color:var(--suave)}
+.fuentes{margin-top:6px!important;font-size:13px;color:var(--suave)}
+.caja{position:sticky;bottom:0;background:var(--fondo);display:grid;grid-template-columns:1fr auto;gap:6px 8px;padding:12px 0}
+.caja label{grid-column:1/-1;font-weight:600}
+textarea{font:inherit;width:100%;padding:10px;border-radius:8px;border:1px solid var(--linea);background:var(--papel);color:var(--tinta);resize:vertical}
+.contador{grid-column:1;font-size:13px;color:var(--suave)}
+.caja button{grid-row:2;grid-column:2}
+.error{grid-column:1/-1;margin:0;color:var(--alerta);min-height:1.5em}
+@media (max-width:480px){.msg{max-width:100%}}

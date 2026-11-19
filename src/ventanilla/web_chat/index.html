@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ventanilla · asistente de un banco ficticio</title>
+<link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+<main class="chat" aria-labelledby="titulo">
+  <header class="cab">
+    <h1 id="titulo">Ventanilla</h1>
+    <p class="aviso" id="aviso">Asistente virtual con IA · datos 100 % ficticios · puede equivocarse</p>
+    <div class="cab-acc">
+      <button type="button" class="sec" id="asesor">Hablar con un asesor</button>
+      <details class="sesion">
+        <summary>Iniciar sesión de prueba</summary>
+        <form id="form-sesion">
+          <label for="token">Token de demostración</label>
+          <select id="token"><option value="demo-ana">Ana (demo-ana)</option><option value="demo-luis">Luis (demo-luis)</option><option value="demo-rosa">Rosa (demo-rosa)</option></select>
+          <button type="submit">Entrar</button>
+          <p id="estado-sesion" role="status"></p>
+        </form>
+      </details>
+    </div>
+  </header>
+  <ol class="log" id="log" role="log" aria-live="polite" aria-label="Conversación">
+    <li class="msg asistente"><span class="quien">Ventanilla</span><p>Hola, soy Ventanilla, un asistente con inteligencia artificial. Puedo ayudarte con comisiones, el ITF, reclamos, privacidad y atención. Para algo más, escribe «asesor».</p></li>
+  </ol>
+  <form class="caja" id="form">
+    <label for="mensaje">Tu mensaje</label>
+    <textarea id="mensaje" rows="2" maxlength="1000" required aria-describedby="contador"></textarea>
+    <span id="contador" class="contador">0 / 1000</span>
+    <button type="submit" id="enviar">Enviar</button>
+    <p id="error" class="error" role="alert"></p>
+  </form>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
