@@ -1,0 +1,36 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Based on the given text, please generate a comprehensive list of FACTUAL, undisputed truths, that can inferred from the provided text.\nThese truths, MUST BE COHERENT. They must NOT be taken out of context.\n\nExample:\nExample Text: \n\"Albert Einstein, the genius often associated with wild hair and mind-bending theories, famously won the Nobel Prize in Physics—though not for his groundbreaking work on relativity, as many assume. Instead, in 1968, he was honored for his discovery of the photoelectric effect, a phenomenon that laid the foundation for quantum mechanics.\"\n\nExample JSON: \n{\n  \"truths\": [\n    \"Einstein won the noble prize for his discovery of the photoelectric effect in 1968.\",\n    \"The photoelectric effect is a phenomenon that laid the foundation for quantum mechanics.\"\n  ]  \n}\n===== END OF EXAMPLE ======\n**\nIMPORTANT: Please make sure to only return in JSON format, with the \"truths\" key as a list of strings. No words or explanation is needed.\nOnly include truths that are factual, BUT IT DOESN'T MATTER IF THEY ARE FACTUALLY CORRECT.\n**\n\nText:\nReclamos y requerimientos. ## Plazo de respuesta\n\nEl banco responde en un plazo máximo de 15 días hábiles desde que se presenta el reclamo (Reglamento de Gestión de Reclamos y Requerimientos, Res. SBS 4036-2022). Solo en casos excepcionales, por ejemplo cuando se necesita la respuesta de un tercero, el plazo se puede extender, y el banco debe avisarte antes de que venza indicando el motivo.\n\nReclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento.\n\nJSON:"
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "truths": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Truths",
+     "type": "array"
+    }
+   },
+   "required": [
+    "truths"
+   ],
+   "title": "Truths",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"truths\": [\n    \"El banco debe responder a un reclamo dentro de un plazo máximo de 15 días hábiles desde que se presenta (Res. SBS 4036-2022).\",\n    \"En casos excepcionales, como cuando se necesita una respuesta de un tercero, el plazo de respuesta puede extenderse, y el banco debe avisar antes de que el plazo vence con el motivo de la extensión.\",\n    \"Los reclamos pueden presentarse a través de este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual.\",\n    \"No es necesario contratar un abogado para presentar un reclamo, y no hay costo asociado con la presentación.\",\n    \"Al registrar un reclamo, se recibe un código de reclamo para hacer el seguimiento del mismo.\"\n  ]\n}"
+}

@@ -1,0 +1,36 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Based on the given text, please generate a comprehensive list of FACTUAL, undisputed truths, that can inferred from the provided text.\nThese truths, MUST BE COHERENT. They must NOT be taken out of context.\n\nExample:\nExample Text: \n\"Albert Einstein, the genius often associated with wild hair and mind-bending theories, famously won the Nobel Prize in Physics—though not for his groundbreaking work on relativity, as many assume. Instead, in 1968, he was honored for his discovery of the photoelectric effect, a phenomenon that laid the foundation for quantum mechanics.\"\n\nExample JSON: \n{\n  \"truths\": [\n    \"Einstein won the noble prize for his discovery of the photoelectric effect in 1968.\",\n    \"The photoelectric effect is a phenomenon that laid the foundation for quantum mechanics.\"\n  ]  \n}\n===== END OF EXAMPLE ======\n**\nIMPORTANT: Please make sure to only return in JSON format, with the \"truths\" key as a list of strings. No words or explanation is needed.\nOnly include truths that are factual, BUT IT DOESN'T MATTER IF THEY ARE FACTUALLY CORRECT.\n**\n\nText:\nImpuesto a las Transacciones Financieras (ITF). ## Quién lo paga\n\nEn una transferencia, el ITF lo paga quien envía el dinero. Si un monto es tan pequeño que el impuesto truncado da cero, no se cobra nada.\n\nImpuesto a las Transacciones Financieras (ITF). ## Cómo se calcula\n\nSe multiplica el monto por 0,005 % y el resultado se trunca al múltiplo de cinco céntimos inferior (art. 13 del TUO de la Ley 28194). Por ejemplo, una transferencia de S/ 10 000,00 paga S/ 0,50 de ITF, y una de S/ 1 500,00 paga S/ 0,05 (0,075 truncado a 0,05).\n\nJSON:"
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "truths": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Truths",
+     "type": "array"
+    }
+   },
+   "required": [
+    "truths"
+   ],
+   "title": "Truths",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"truths\": [\n    \"The Impuesto a las Transacciones Financieras (ITF) is paid by the sender of the money in a transfer.\",\n    \"If the amount is so small that the truncated tax results in zero, no tax is charged.\",\n    \"The ITF is calculated by multiplying the amount by 0.005% and truncating the result to the nearest lower multiple of five cents (as per Article 13 of the TUO of Law 28194).\",\n    \"For example, a transfer of S/ 10,000.00 pays S/ 0.50 as ITF, and a transfer of S/ 1,500.00 pays S/ 0.05 (0.075 truncated to 0.05).\"\n  ]\n}"
+}

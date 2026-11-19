@@ -1,0 +1,36 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Based on the given text, please generate a comprehensive list of FACTUAL, undisputed truths, that can inferred from the provided text.\nThese truths, MUST BE COHERENT. They must NOT be taken out of context.\n\nExample:\nExample Text: \n\"Albert Einstein, the genius often associated with wild hair and mind-bending theories, famously won the Nobel Prize in Physics—though not for his groundbreaking work on relativity, as many assume. Instead, in 1968, he was honored for his discovery of the photoelectric effect, a phenomenon that laid the foundation for quantum mechanics.\"\n\nExample JSON: \n{\n  \"truths\": [\n    \"Einstein won the noble prize for his discovery of the photoelectric effect in 1968.\",\n    \"The photoelectric effect is a phenomenon that laid the foundation for quantum mechanics.\"\n  ]  \n}\n===== END OF EXAMPLE ======\n**\nIMPORTANT: Please make sure to only return in JSON format, with the \"truths\" key as a list of strings. No words or explanation is needed.\nOnly include truths that are factual, BUT IT DOESN'T MATTER IF THEY ARE FACTUALLY CORRECT.\n**\n\nText:\nPrivacidad y seguridad. ## Tus datos personales\n\nTratamos tus datos según la Ley 29733 de Protección de Datos Personales y su reglamento (DS 016-2024-JUS). Puedes pedir el acceso, la rectificación, la cancelación o la oposición al uso de tus datos (derechos ARCO) en cualquier agencia o por el formulario de privacidad de la web.\n\nImpuesto a las Transacciones Financieras (ITF). El ITF es un impuesto creado por ley (TUO de la Ley 28194). No es una comisión del banco: el banco solo lo cobra y lo entrega al Estado.\n\nJSON:"
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "truths": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Truths",
+     "type": "array"
+    }
+   },
+   "required": [
+    "truths"
+   ],
+   "title": "Truths",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"truths\": [\n    \"The text mentions Protección de Datos Personales (Ley 29733) and Derechos ARCO (access, rectification, cancellation, opposition) for personal data handling.\",\n    \"Impuesto a las Transacciones Financieras (ITF) is described as being created by law (TUO of Ley 28194) and not as a bank commission.\",\n    \"The bank only collects and forwards the ITF to the State, according to the text.\"\n  ]\n}"
+}

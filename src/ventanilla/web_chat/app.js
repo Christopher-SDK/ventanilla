@@ -5,7 +5,7 @@ const historial = [];
 let sesion = null;
 
 function agregar(rol, texto, extra = {}) {
-  const li = document.createElement('li');
+  const li = document.createElement('div');
   li.className = `msg ${rol}${extra.tipo ? ' ' + extra.tipo : ''}`;
   const quien = document.createElement('span');
   quien.className = 'quien';

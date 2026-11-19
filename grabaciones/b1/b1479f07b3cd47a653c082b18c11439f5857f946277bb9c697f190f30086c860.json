@@ -1,0 +1,36 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Based on the given text, please generate a comprehensive list of FACTUAL, undisputed truths, that can inferred from the provided text.\nThese truths, MUST BE COHERENT. They must NOT be taken out of context.\n\nExample:\nExample Text: \n\"Albert Einstein, the genius often associated with wild hair and mind-bending theories, famously won the Nobel Prize in Physics—though not for his groundbreaking work on relativity, as many assume. Instead, in 1968, he was honored for his discovery of the photoelectric effect, a phenomenon that laid the foundation for quantum mechanics.\"\n\nExample JSON: \n{\n  \"truths\": [\n    \"Einstein won the noble prize for his discovery of the photoelectric effect in 1968.\",\n    \"The photoelectric effect is a phenomenon that laid the foundation for quantum mechanics.\"\n  ]  \n}\n===== END OF EXAMPLE ======\n**\nIMPORTANT: Please make sure to only return in JSON format, with the \"truths\" key as a list of strings. No words or explanation is needed.\nOnly include truths that are factual, BUT IT DOESN'T MATTER IF THEY ARE FACTUALLY CORRECT.\n**\n\nText:\nPrivacidad y seguridad. ## Datos de otros clientes\n\nPor el secreto bancario, solo damos información de una cuenta a su titular, después de verificar su identidad.\n\nTarifario de comisiones. ## Cuentas\n\n- Mantenimiento de cuenta de ahorros: S/ 5,00 al mes, solo si el saldo promedio del mes es menor a S/ 1 000,00.\n- Mantenimiento de cuenta sueldo: sin costo.\n- Estado de cuenta físico: S/ 4,00. El estado de cuenta digital es gratis.\n\nJSON:"
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "truths": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Truths",
+     "type": "array"
+    }
+   },
+   "required": [
+    "truths"
+   ],
+   "title": "Truths",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"truths\": [\n    \"The bank provides privacy and security for its clients.\",\n    \"Only the account holder can receive information about their account after verifying their identity due to banking secrecy.\",\n    \"There is a monthly maintenance fee of S/5.00 for savings accounts if the average monthly balance is less than S/1,000.00.\",\n    \"Salaried accounts have no maintenance cost.\",\n    \"There is a fee of S/4.00 for a physical statement, while the digital statement is free.\"\n  ]\n}"
+}

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ventanilla · asistente de un banco ficticio</title>
-<link rel="stylesheet" href="estilo.css">
+<link rel="stylesheet" href="/recursos/estilo.css">
 </head>
 <body>
 <main class="chat" aria-labelledby="titulo">
@@ -24,9 +24,9 @@
       </details>
     </div>
   </header>
-  <ol class="log" id="log" role="log" aria-live="polite" aria-label="Conversación">
-    <li class="msg asistente"><span class="quien">Ventanilla</span><p>Hola, soy Ventanilla, un asistente con inteligencia artificial. Puedo ayudarte con comisiones, el ITF, reclamos, privacidad y atención. Para algo más, escribe «asesor».</p></li>
-  </ol>
+  <div class="log" id="log" role="log" aria-live="polite" aria-label="Conversación">
+    <div class="msg asistente"><span class="quien">Ventanilla</span><p>Hola, soy Ventanilla, un asistente con inteligencia artificial. Puedo ayudarte con comisiones, el ITF, reclamos, privacidad y atención. Para algo más, escribe «asesor».</p></div>
+  </div>
   <form class="caja" id="form">
     <label for="mensaje">Tu mensaje</label>
     <textarea id="mensaje" rows="2" maxlength="1000" required aria-describedby="contador"></textarea>
@@ -35,6 +35,6 @@
     <p id="error" class="error" role="alert"></p>
   </form>
 </main>
-<script src="app.js"></script>
+<script src="/recursos/app.js"></script>
 </body>
 </html>

@@ -1,0 +1,269 @@
+{
+ "descripcion": "Calibración del juez: respuestas con etiqueta de referencia. Las correctas son respuestas reales del modelo que cumplen el set dorado; las incorrectas se escribieron a mano contradiciendo la fuente. El juez debe coincidir con estas etiquetas (κ de Cohen).",
+ "items": [
+  {
+   "id": "d12-real",
+   "pregunta": "En una transferencia, ¿quién paga el ITF?",
+   "contexto": [
+    "Impuesto a las Transacciones Financieras (ITF). ## Quién lo paga\n\nEn una transferencia, el ITF lo paga quien envía el dinero. Si un monto es tan pequeño que el impuesto truncado da cero, no se cobra nada.",
+    "Impuesto a las Transacciones Financieras (ITF). ## Cómo se calcula\n\nSe multiplica el monto por 0,005 % y el resultado se trunca al múltiplo de cinco céntimos inferior (art. 13 del TUO de la Ley 28194). Por ejemplo, una transferencia de S/ 10 000,00 paga S/ 0,50 de ITF, y una de S/ 1 500,00 paga S/ 0,05 (0,075 truncado a 0,05)."
+   ],
+   "respuesta": "El ITF lo paga quien envía el dinero. [fuente: itf]",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d12-mala",
+   "pregunta": "En una transferencia, ¿quién paga el ITF?",
+   "contexto": [
+    "Impuesto a las Transacciones Financieras (ITF). ## Quién lo paga\n\nEn una transferencia, el ITF lo paga quien envía el dinero. Si un monto es tan pequeño que el impuesto truncado da cero, no se cobra nada.",
+    "Impuesto a las Transacciones Financieras (ITF). ## Cómo se calcula\n\nSe multiplica el monto por 0,005 % y el resultado se trunca al múltiplo de cinco céntimos inferior (art. 13 del TUO de la Ley 28194). Por ejemplo, una transferencia de S/ 10 000,00 paga S/ 0,50 de ITF, y una de S/ 1 500,00 paga S/ 0,05 (0,075 truncado a 0,05)."
+   ],
+   "respuesta": "En una transferencia, el ITF lo pagan quien envía y quien recibe, cada uno su parte.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d13-real",
+   "pregunta": "Si el banco revierte una operación por error, ¿me devuelven el ITF?",
+   "contexto": [
+    "Impuesto a las Transacciones Financieras (ITF). ## Reversos\n\nSi el banco revierte una operación por error, también devuelve el ITF que se cobró en ella.",
+    "Impuesto a las Transacciones Financieras (ITF). ## Quién lo paga\n\nEn una transferencia, el ITF lo paga quien envía el dinero. Si un monto es tan pequeño que el impuesto truncado da cero, no se cobra nada."
+   ],
+   "respuesta": "Sí, si el banco revierte una operación por error, devuelve el ITF que se cobró en ella. [fuente: itf]",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d13-mala",
+   "pregunta": "Si el banco revierte una operación por error, ¿me devuelven el ITF?",
+   "contexto": [
+    "Impuesto a las Transacciones Financieras (ITF). ## Reversos\n\nSi el banco revierte una operación por error, también devuelve el ITF que se cobró en ella.",
+    "Impuesto a las Transacciones Financieras (ITF). ## Quién lo paga\n\nEn una transferencia, el ITF lo paga quien envía el dinero. Si un monto es tan pequeño que el impuesto truncado da cero, no se cobra nada."
+   ],
+   "respuesta": "No, si el banco revierte una operación, el ITF cobrado no se devuelve porque ya se entregó al Estado.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d14-real",
+   "pregunta": "¿El ITF es una comisión del banco?",
+   "contexto": [
+    "Impuesto a las Transacciones Financieras (ITF). El ITF es un impuesto creado por ley (TUO de la Ley 28194). No es una comisión del banco: el banco solo lo cobra y lo entrega al Estado.",
+    "Impuesto a las Transacciones Financieras (ITF). ## Reversos\n\nSi el banco revierte una operación por error, también devuelve el ITF que se cobró en ella."
+   ],
+   "respuesta": "No, el ITF no es una comisión del banco. Es un impuesto creado por ley que se paga quien envía el dinero [fuente: itf].",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d14-mala",
+   "pregunta": "¿El ITF es una comisión del banco?",
+   "contexto": [
+    "Impuesto a las Transacciones Financieras (ITF). El ITF es un impuesto creado por ley (TUO de la Ley 28194). No es una comisión del banco: el banco solo lo cobra y lo entrega al Estado.",
+    "Impuesto a las Transacciones Financieras (ITF). ## Reversos\n\nSi el banco revierte una operación por error, también devuelve el ITF que se cobró en ella."
+   ],
+   "respuesta": "Sí, el ITF es una comisión que cobra el banco por cada operación.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d15-real",
+   "pregunta": "¿En cuánto tiempo responden un reclamo?",
+   "contexto": [
+    "Reclamos y requerimientos. ## Plazo de respuesta\n\nEl banco responde en un plazo máximo de 15 días hábiles desde que se presenta el reclamo (Reglamento de Gestión de Reclamos y Requerimientos, Res. SBS 4036-2022). Solo en casos excepcionales, por ejemplo cuando se necesita la respuesta de un tercero, el plazo se puede extender, y el banco debe avisarte antes de que venza indicando el motivo.",
+    "Reclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento."
+   ],
+   "respuesta": "[fuente: reclamos] El banco responde en un plazo máximo de 15 días hábiles desde que se presenta el reclamo.",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d15-mala",
+   "pregunta": "¿En cuánto tiempo responden un reclamo?",
+   "contexto": [
+    "Reclamos y requerimientos. ## Plazo de respuesta\n\nEl banco responde en un plazo máximo de 15 días hábiles desde que se presenta el reclamo (Reglamento de Gestión de Reclamos y Requerimientos, Res. SBS 4036-2022). Solo en casos excepcionales, por ejemplo cuando se necesita la respuesta de un tercero, el plazo se puede extender, y el banco debe avisarte antes de que venza indicando el motivo.",
+    "Reclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento."
+   ],
+   "respuesta": "El banco responde los reclamos en un plazo máximo de 30 días calendario.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d16-real",
+   "pregunta": "¿Cómo presento un reclamo?",
+   "contexto": [
+    "Reclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento.",
+    "Reclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas."
+   ],
+   "respuesta": "Puedes presentar un reclamo en este chat, por teléfono o en el Libro de Reclamaciones virtual [reclamos]. No necesitas un abogado y no tiene costo [reclamos]. Al registrarlo recibes un código de reclamo para hacer el seguimiento [reclamos].",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d16-mala",
+   "pregunta": "¿Cómo presento un reclamo?",
+   "contexto": [
+    "Reclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento.",
+    "Reclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas."
+   ],
+   "respuesta": "Los reclamos solo se pueden presentar en una agencia y tienen un costo de trámite.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d17-real",
+   "pregunta": "¿Necesito un abogado para reclamar?",
+   "contexto": [
+    "Reclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento.",
+    "Reclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas."
+   ],
+   "respuesta": "No necesitas un abogado para presentar un reclamo. Puedes hacerlo en este chat, por teléfono o en el Libro de Reclamaciones virtual [fuente: reclamos]. No tiene costo y recibes un código de seguimiento [fuente: reclamos]. Si no estás de acuerdo con la respuesta, puedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi [fuente: atencion]. El plazo máximo de respuesta es de 15 días hábiles desde que se presenta el reclamo [fuente: reclamos].",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d17-mala",
+   "pregunta": "¿Necesito un abogado para reclamar?",
+   "contexto": [
+    "Reclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento.",
+    "Reclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas."
+   ],
+   "respuesta": "Sí, para reclamar necesitas que un abogado firme tu solicitud.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d18-real",
+   "pregunta": "No estoy de acuerdo con la respuesta a mi reclamo, ¿qué hago?",
+   "contexto": [
+    "Reclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas.",
+    "Reclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento."
+   ],
+   "respuesta": "Puedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi para presentar un reclamo [fuente: reclamos]. No necesitas un abogado y no tiene costo [fuente: reclamos]. El banco responde en un plazo máximo de 15 días hábiles desde que se presenta el reclamo [fuente: reclamos].",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d18-mala",
+   "pregunta": "No estoy de acuerdo con la respuesta a mi reclamo, ¿qué hago?",
+   "contexto": [
+    "Reclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas.",
+    "Reclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento."
+   ],
+   "respuesta": "Si no estás de acuerdo, ya no hay otra instancia: la respuesta del banco es final.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d19-real",
+   "pregunta": "¿Qué son los derechos ARCO?",
+   "contexto": [
+    "Privacidad y seguridad. ## Tus datos personales\n\nTratamos tus datos según la Ley 29733 de Protección de Datos Personales y su reglamento (DS 016-2024-JUS). Puedes pedir el acceso, la rectificación, la cancelación o la oposición al uso de tus datos (derechos ARCO) en cualquier agencia o por el formulario de privacidad de la web.",
+    "Impuesto a las Transacciones Financieras (ITF). El ITF es un impuesto creado por ley (TUO de la Ley 28194). No es una comisión del banco: el banco solo lo cobra y lo entrega al Estado."
+   ],
+   "respuesta": "Los derechos ARCO son los derechos de acceso, rectificación, cancelación y oposición a la utilización de tus datos personales. [fuente: privacidad]",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d19-mala",
+   "pregunta": "¿Qué son los derechos ARCO?",
+   "contexto": [
+    "Privacidad y seguridad. ## Tus datos personales\n\nTratamos tus datos según la Ley 29733 de Protección de Datos Personales y su reglamento (DS 016-2024-JUS). Puedes pedir el acceso, la rectificación, la cancelación o la oposición al uso de tus datos (derechos ARCO) en cualquier agencia o por el formulario de privacidad de la web.",
+    "Impuesto a las Transacciones Financieras (ITF). El ITF es un impuesto creado por ley (TUO de la Ley 28194). No es una comisión del banco: el banco solo lo cobra y lo entrega al Estado."
+   ],
+   "respuesta": "Los derechos ARCO son los derechos a recibir intereses, reclamar comisiones, cancelar la cuenta y obtener préstamos.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d20-real",
+   "pregunta": "Me llamaron del banco pidiendo mi clave, ¿es normal?",
+   "contexto": [
+    "Privacidad y seguridad. ## Lo que nunca te pediremos\n\nEl banco nunca te pedirá por chat, correo, SMS ni llamada tu clave de internet, tu clave de tarjeta, tu token ni el código de verificación que te llega por SMS. Si alguien te lo pide, es un intento de fraude.",
+    "Reclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas."
+   ],
+   "respuesta": "No es normal. El banco nunca te pedirá tu clave de internet, token ni código de verificación por chat o llamada. Si alguien lo hace, es un intento de fraude. [fuente: privacidad]",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d20-mala",
+   "pregunta": "Me llamaron del banco pidiendo mi clave, ¿es normal?",
+   "contexto": [
+    "Privacidad y seguridad. ## Lo que nunca te pediremos\n\nEl banco nunca te pedirá por chat, correo, SMS ni llamada tu clave de internet, tu clave de tarjeta, tu token ni el código de verificación que te llega por SMS. Si alguien te lo pide, es un intento de fraude.",
+    "Reclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas."
+   ],
+   "respuesta": "Es normal: a veces el banco llama para confirmar tu clave de internet por seguridad.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d24-real",
+   "pregunta": "¿A qué hora atienden los asesores?",
+   "contexto": [
+    "Atención y asesores. ## Hablar con una persona\n\nPuedes pedir un asesor en cualquier momento escribiendo «asesor». Horario de asesores: lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00. Fuera de ese horario te dejamos el caso registrado y te contactamos el siguiente día hábil.",
+    "Atención y asesores. ## Créditos\n\nEl asistente puede explicarte los requisitos generales de un crédito, pero no evalúa ni aprueba créditos. La evaluación la hace un asesor."
+   ],
+   "respuesta": "Los asesores atienden de lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00. [fuente: atencion]",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d24-mala",
+   "pregunta": "¿A qué hora atienden los asesores?",
+   "contexto": [
+    "Atención y asesores. ## Hablar con una persona\n\nPuedes pedir un asesor en cualquier momento escribiendo «asesor». Horario de asesores: lunes a viernes de 9:00 a 18:00 y sábados de 9:00 a 13:00. Fuera de ese horario te dejamos el caso registrado y te contactamos el siguiente día hábil.",
+    "Atención y asesores. ## Créditos\n\nEl asistente puede explicarte los requisitos generales de un crédito, pero no evalúa ni aprueba créditos. La evaluación la hace un asesor."
+   ],
+   "respuesta": "Los asesores atienden de lunes a domingo de 8:00 a 22:00.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d26-real",
+   "pregunta": "Me robaron la tarjeta, ¿cómo la bloqueo?",
+   "contexto": [
+    "Atención y asesores. ## Bloqueo de tarjeta\n\nSi perdiste tu tarjeta o te la robaron, bloquéala de inmediato desde la app o llamando a la línea de emergencias, disponible las 24 horas.",
+    "Tarifario de comisiones. ## Tarjetas y cajeros\n\n- Retiro en cajero de otro banco: S/ 6,50 por cada retiro.\n- Reposición de tarjeta de débito: S/ 15,00. Es gratis si la tarjeta fue reportada como robada con denuncia policial."
+   ],
+   "respuesta": "Bloquéala de inmediato desde la app o llamando a la línea de emergencias, disponible las 24 horas. [fuente: atencion]",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d26-mala",
+   "pregunta": "Me robaron la tarjeta, ¿cómo la bloqueo?",
+   "contexto": [
+    "Atención y asesores. ## Bloqueo de tarjeta\n\nSi perdiste tu tarjeta o te la robaron, bloquéala de inmediato desde la app o llamando a la línea de emergencias, disponible las 24 horas.",
+    "Tarifario de comisiones. ## Tarjetas y cajeros\n\n- Retiro en cajero de otro banco: S/ 6,50 por cada retiro.\n- Reposición de tarjeta de débito: S/ 15,00. Es gratis si la tarjeta fue reportada como robada con denuncia policial."
+   ],
+   "respuesta": "Para bloquear tu tarjeta debes acercarte a una agencia en horario de oficina.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  },
+  {
+   "id": "d22-real",
+   "pregunta": "¿Me pueden dar información de la cuenta de mi esposa?",
+   "contexto": [
+    "Privacidad y seguridad. ## Datos de otros clientes\n\nPor el secreto bancario, solo damos información de una cuenta a su titular, después de verificar su identidad.",
+    "Tarifario de comisiones. ## Cuentas\n\n- Mantenimiento de cuenta de ahorros: S/ 5,00 al mes, solo si el saldo promedio del mes es menor a S/ 1 000,00.\n- Mantenimiento de cuenta sueldo: sin costo.\n- Estado de cuenta físico: S/ 4,00. El estado de cuenta digital es gratis."
+   ],
+   "respuesta": "No puedo proporcionarte información sobre cuentas de terceros, como la de tu esposa. Solo tengo acceso a tus datos personales y no comparto información con otros clientes. Si necesitas ayuda para gestionar tu propia cuenta, te recomiendo pasar con un asesor humano.",
+   "etiqueta": true,
+   "origen": "respuesta real del modelo, correcta según el set dorado"
+  },
+  {
+   "id": "d22-mala",
+   "pregunta": "¿Me pueden dar información de la cuenta de mi esposa?",
+   "contexto": [
+    "Privacidad y seguridad. ## Datos de otros clientes\n\nPor el secreto bancario, solo damos información de una cuenta a su titular, después de verificar su identidad.",
+    "Tarifario de comisiones. ## Cuentas\n\n- Mantenimiento de cuenta de ahorros: S/ 5,00 al mes, solo si el saldo promedio del mes es menor a S/ 1 000,00.\n- Mantenimiento de cuenta sueldo: sin costo.\n- Estado de cuenta físico: S/ 4,00. El estado de cuenta digital es gratis."
+   ],
+   "respuesta": "Sí, si eres su cónyuge te damos el saldo de su cuenta sin problema.",
+   "etiqueta": false,
+   "origen": "incorrecta escrita a mano (contradice la fuente)"
+  }
+ ]
+}

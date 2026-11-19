@@ -1,0 +1,36 @@
+{
+ "peticion": {
+  "model": "granite4.1:3b",
+  "messages": [
+   {
+    "role": "user",
+    "content": "Based on the given text, please generate a comprehensive list of FACTUAL, undisputed truths, that can inferred from the provided text.\nThese truths, MUST BE COHERENT. They must NOT be taken out of context.\n\nExample:\nExample Text: \n\"Albert Einstein, the genius often associated with wild hair and mind-bending theories, famously won the Nobel Prize in Physics—though not for his groundbreaking work on relativity, as many assume. Instead, in 1968, he was honored for his discovery of the photoelectric effect, a phenomenon that laid the foundation for quantum mechanics.\"\n\nExample JSON: \n{\n  \"truths\": [\n    \"Einstein won the noble prize for his discovery of the photoelectric effect in 1968.\",\n    \"The photoelectric effect is a phenomenon that laid the foundation for quantum mechanics.\"\n  ]  \n}\n===== END OF EXAMPLE ======\n**\nIMPORTANT: Please make sure to only return in JSON format, with the \"truths\" key as a list of strings. No words or explanation is needed.\nOnly include truths that are factual, BUT IT DOESN'T MATTER IF THEY ARE FACTUALLY CORRECT.\n**\n\nText:\nReclamos y requerimientos. ## Si no estás de acuerdo con la respuesta\n\nPuedes acudir a la Plataforma de Atención al Usuario de la SBS o a Indecopi. Presentar un reclamo en el banco no te impide acudir a ellas.\n\nReclamos y requerimientos. ## Cómo presentar un reclamo\n\nPuedes presentar un reclamo en este chat, en cualquier agencia, por teléfono o en el Libro de Reclamaciones virtual. No necesitas un abogado y no tiene costo. Al registrarlo recibes un código de reclamo para hacer el seguimiento.\n\nJSON:"
+   }
+  ],
+  "stream": false,
+  "think": false,
+  "options": {
+   "temperature": 0,
+   "top_k": 1,
+   "num_ctx": 4096,
+   "seed": 7
+  },
+  "format": {
+   "properties": {
+    "truths": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Truths",
+     "type": "array"
+    }
+   },
+   "required": [
+    "truths"
+   ],
+   "title": "Truths",
+   "type": "object"
+  }
+ },
+ "respuesta": "{\n  \"truths\": [\n    \"There are platforms like the SBS User Attention Platform or Indecopi where you can lodge complaints if you disagree with a response.\",\n    \"You can present a complaint through this chat, at any agency, by phone, or in the Virtual Complaint Book. No lawyer is required, and there is no cost.\",\n    \"When you register a complaint, you receive a complaint code to track its status.\"\n  ]\n}"
+}

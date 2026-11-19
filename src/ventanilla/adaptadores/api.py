@@ -9,7 +9,7 @@ from pathlib import Path
 import httpx
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -52,12 +52,31 @@ class SesionEntrada(BaseModel):
     token: str = Field(min_length=1, max_length=64)
 
 
+class SesionSalida(BaseModel):
+    sesion: str
+    nombre: str
+
+
 class ChatSalida(BaseModel):
     texto: str
     tipo: str
     fuentes: list[str]
     aviso: str
     codigo_reclamo: str | None = None
+
+
+class Problema(BaseModel):
+    """RFC 9457. «motivo» es estable y sirve para que el cliente decida qué hacer."""
+
+    type: str = "about:blank"
+    title: str
+    status: int
+    motivo: str
+    detail: str | None = None
+
+
+def _resp(*codigos: int) -> dict:
+    return {c: {"model": Problema, "content": {"application/problem+json": {}}} for c in codigos}
 
 
 def problema(estado: int, titulo: str, motivo: str, detalle: str = "", **extra) -> JSONResponse:
@@ -111,8 +130,10 @@ def crear_app(asistente: Asistente, *, por_minuto: int = 30) -> FastAPI:
 
     @app.exception_handler(StarletteHTTPException)
     async def http(_, exc: StarletteHTTPException):
-        motivo = {404: "NO_ENCONTRADO", 405: "METODO_NO_PERMITIDO"}.get(exc.status_code, "ERROR_HTTP")
-        return problema(exc.status_code, str(exc.detail), motivo)
+        motivo = {400: "CUERPO_ILEGIBLE", 404: "NO_ENCONTRADO", 405: "METODO_NO_PERMITIDO"}.get(exc.status_code, "ERROR_HTTP")
+        r = problema(exc.status_code, str(exc.detail), motivo)
+        r.headers.update(exc.headers or {})  # p. ej. «Allow» en un 405 (RFC 9110)
+        return r
 
     @app.exception_handler(GrabacionFaltante)
     async def sin_grabacion(_, exc):
@@ -126,11 +147,11 @@ def crear_app(asistente: Asistente, *, por_minuto: int = 30) -> FastAPI:
         historial = [Turno(t.rol, t.texto) for t in e.historial]
         return asistente.responder(e.mensaje, historial, sesiones.get(e.sesion or ""))
 
-    @app.get("/api/salud")
+    @app.get("/api/salud", response_model=dict[str, str])
     def salud():
         return {"estado": "ok", "modelo": asistente.modelo.nombre, "embeddings": asistente.embeddings.nombre}
 
-    @app.post("/api/sesion", responses={401: {"description": "Token desconocido"}})
+    @app.post("/api/sesion", response_model=SesionSalida, responses=_resp(400, 401, 422))
     def sesion(e: SesionEntrada):
         cliente = asistente.clientes.por_token(e.token)
         if not cliente:
@@ -139,12 +160,12 @@ def crear_app(asistente: Asistente, *, por_minuto: int = 30) -> FastAPI:
         sesiones[sid] = cliente.id
         return {"sesion": sid, "nombre": cliente.nombre.split()[0]}
 
-    @app.post("/api/chat", response_model=ChatSalida, responses={422: {"description": "Entrada inválida"}, 429: {"description": "Límite"}})
+    @app.post("/api/chat", response_model=ChatSalida, responses=_resp(400, 422, 429, 503))
     def chat(e: ChatEntrada):
         r = responder(e)
         return ChatSalida(texto=r.texto, tipo=r.tipo, fuentes=r.fuentes, aviso=r.aviso, codigo_reclamo=r.codigo_reclamo)
 
-    @app.post("/api/chat/flujo", responses={200: {"content": {"text/event-stream": {}}}})
+    @app.post("/api/chat/flujo", responses={200: {"content": {"text/event-stream": {}}}, **_resp(400, 422, 429, 503)})
     def flujo(e: ChatEntrada):
         """La respuesta se verifica completa y recién entonces se envía por partes.
 
@@ -163,11 +184,17 @@ def crear_app(asistente: Asistente, *, por_minuto: int = 30) -> FastAPI:
 
         return StreamingResponse(eventos(), media_type="text/event-stream")
 
-    app.mount("/", StaticFiles(directory=WEB, html=True), name="web")
+    @app.get("/", include_in_schema=False)
+    def inicio():
+        return FileResponse(WEB / "index.html", media_type="text/html; charset=utf-8")
+
+    app.mount("/recursos", StaticFiles(directory=WEB), name="recursos")
     return app
 
 
 def app_desde_entorno() -> FastAPI:
+    import os
+
     from ..configuracion import construir
 
-    return crear_app(construir())
+    return crear_app(construir(), por_minuto=int(os.environ.get("VENTANILLA_POR_MINUTO", "30")))
