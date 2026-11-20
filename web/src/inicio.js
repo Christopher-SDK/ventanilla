@@ -1,5 +1,5 @@
 // Inicio: la rendija (FIRMA-01), la trastienda (FIRMA-02), rompe una pieza (FIRMA-03), videos y la guía.
-import { ScrollTrigger, reducido } from './comun.js';
+import { ScrollTrigger, lenis, reducido } from './comun.js';
 import escenarios from '../datos/escenarios.json';
 import grabadas from '../datos/grabadas.json';
 import guardiaDatos from '../datos/guardia.json';
@@ -209,10 +209,10 @@ const banco = $('[data-banco]');
 const diagrama = $('.diagrama');
 const piezas = $$('.pieza', diagrama);
 const papelDiagrama = $('[data-papel-diagrama]');
-const hilo = $('.hilo path', banco);
+const hilos = $$('.hilo path', banco);
 const marcarPieza = (p) => piezas.forEach((x) => x.classList.toggle('rota', x.dataset.pieza === p));
 let animaciones = [], relojes = [];
-const pararBanco = () => { animaciones.forEach((a) => a.cancel()); relojes.forEach(clearTimeout); animaciones = []; relojes = []; hilo.style.opacity = ''; };
+const pararBanco = () => { animaciones.forEach((a) => a.cancel()); relojes.forEach(clearTimeout); animaciones = []; relojes = []; };
 const anima = (el, k, o) => { const a = el.animate(k, { fill: 'both', ...o }); animaciones.push(a); return a; };
 const luego = (ms, f) => relojes.push(setTimeout(f, ms));
 
@@ -225,38 +225,53 @@ function propagar(panel, pieza) {
   const sin = $('.lado:not(.lado--rota)', panel), con = $('.lado--rota', panel), prueba = $('.prueba-roja', panel);
   const b = banco.getBoundingClientRect(), d = diagrama.getBoundingClientRect(), r = rota.getBoundingClientRect(), c = con.getBoundingClientRect();
   // El papel corre como en una cinta (lineal): el toque cae justo al pasar por la pieza
-  const largo = d.width - 12 * 2 - 46 - 20, viaje = 700;
+  const largo = d.width - 12 * 2 - 46 - 28, viaje = 550; // se detiene antes del hilo del último costado
   const golpe = Math.round(Math.min(1, Math.max(0, (r.left + r.width / 2 - d.left - 12 - 23) / largo)) * viaje);
   anima(papelDiagrama, [{ transform: 'translateX(0)' }, { transform: `translateX(${largo}px)` }], { duration: viaje, easing: 'linear' });
   anima(sin, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' });
   let llega = golpe + 120;
-  // En columnas el hilo baja por el borde derecho, sin cruzar texto, hasta el borde de la respuesta dañada
+  // En columnas, el hilo sale del costado de la pieza rota, baja por el hueco entre piezas (nunca por detrás de otra)
+  // y corre por el borde derecho, sin cruzar texto, hasta el borde de la respuesta dañada
   if (innerWidth > 760 && c.top > d.bottom) {
-    const x0 = r.left + r.width / 2 - b.left, y0 = r.bottom - b.top, xr = d.right - b.left - 1, y1 = c.top - b.top + 1.5;
-    hilo.setAttribute('d', `M${x0},${y0} V${d.bottom - b.top + 8} H${xr} V${y1} H${c.right - b.left}`);
-    const L = hilo.getTotalLength();
-    hilo.style.strokeDasharray = L;
-    // Se traza (480 ms), se queda mientras entra la respuesta y se recoge hacia la respuesta (320 ms)
-    anima(hilo, [
-      { strokeDashoffset: L, opacity: 1, easing: 'cubic-bezier(.65,0,.35,1)' },
-      { strokeDashoffset: 0, opacity: 1, offset: 480 / 1700 },
-      { strokeDashoffset: 0, opacity: 1, offset: 1380 / 1700, easing: 'cubic-bezier(.7,0,.84,0)' },
-      { strokeDashoffset: -L, opacity: 1 },
-    ], { duration: 1700, delay: golpe, fill: 'backwards' });
-    llega = golpe + 480;
+    const x0 = r.right - b.left + 3, y0 = r.top + r.height / 2 - b.top, xr = d.right - b.left - 1, y1 = c.top - b.top + 1.5;
+    const ruta = `M${r.right - b.left},${y0} H${x0} V${d.bottom - b.top + 8} H${xr} V${y1} H${c.right - b.left}`;
+    // Se traza (360 ms), se queda mientras entra la respuesta y se recoge hacia la respuesta (320 ms)
+    hilos.forEach((h) => {
+      h.setAttribute('d', ruta);
+      const L = h.getTotalLength();
+      h.style.strokeDasharray = L;
+      anima(h, [
+        { strokeDashoffset: L, opacity: 1, easing: 'cubic-bezier(.65,0,.35,1)' },
+        { strokeDashoffset: 0, opacity: 1, offset: 360 / 1580 },
+        { strokeDashoffset: 0, opacity: 1, offset: 1260 / 1580, easing: 'cubic-bezier(.7,0,.84,0)' },
+        { strokeDashoffset: -L, opacity: 1 },
+      ], { duration: 1580, delay: golpe, fill: 'backwards' });
+    });
+    llega = golpe + 360;
   }
   luego(golpe, () => { rota.classList.add('rota'); papelDiagrama.classList.add('danado'); });
   anima(con, [{ clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 460, delay: llega, easing: 'cubic-bezier(.16,1,.3,1)' });
   anima(prueba, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], { duration: 360, delay: llega + 380, easing: 'cubic-bezier(.16,1,.3,1)' });
 }
 marcarPieza(interruptores[0].dataset.pieza);
+// Si la ventana cambia a mitad de la animación, el hilo quedaría con la geometría vieja: se salta al estado final
+addEventListener('resize', () => {
+  if (!animaciones.length) return;
+  pararBanco();
+  marcarPieza(interruptores.find((x) => x.getAttribute('aria-checked') === 'true').dataset.pieza);
+  papelDiagrama.classList.add('danado');
+});
 interruptores.forEach((b) => b.addEventListener('click', () => {
   if (b.getAttribute('aria-checked') === 'true') return;
   interruptores.forEach((x) => x.setAttribute('aria-checked', String(x === b)));
   const panel = $(`[data-panel="${b.dataset.falla}"]`);
   $$('[data-panel]').forEach((p) => { p.hidden = p !== panel; });
-  // En móvil, que se vea lo que rompió: el diagrama sube a la vista si quedó abajo
-  if (innerWidth <= 760 && diagrama.getBoundingClientRect().top > innerHeight - 120) diagrama.scrollIntoView({ behavior: reducido ? 'auto' : 'smooth', block: 'start' });
+  // Que se vea lo que rompió, en cualquier ancho: si el diagrama quedó bajo la cabecera o abajo, vuelve a la vista
+  const cab = $('.cab').offsetHeight, arriba = diagrama.getBoundingClientRect().top;
+  if (arriba < cab + 8 || arriba > innerHeight - 120) {
+    const destino = scrollY + arriba - cab - 16;
+    if (lenis) lenis.scrollTo(destino, { immediate: reducido, duration: 0.5 }); else scrollTo({ top: destino, behavior: reducido ? 'auto' : 'smooth' });
+  }
   propagar(panel, b.dataset.pieza);
 }));
 new IntersectionObserver(([e], o) => {

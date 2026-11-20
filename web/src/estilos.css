@@ -258,6 +258,8 @@ section.fallas { padding-top: clamp(56px, 9vh, 96px); }
 /* El hilo: la falla sale de la pieza rota y baja hasta la respuesta que daña */
 .hilo { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 3; }
 .hilo path { fill: none; stroke: var(--mal); stroke-width: 2; opacity: 0; }
+/* Un borde del color del fondo: el hilo no se pierde al cruzar el marco claro del diagrama */
+.hilo .hilo__borde { stroke: var(--fondo); stroke-width: 6; }
 .diagrama { position: relative; overflow: hidden; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; border: 10px solid var(--texto); background: var(--vidrio); padding: 12px 12px 30px; margin-bottom: 20px; }
 .pieza { position: relative; z-index: 1; padding: 10px 6px; text-align: center; font: 600 14px/1.2 var(--sans); border: 1px solid var(--linea); color: var(--texto); background: var(--fondo); transition: color .3s var(--entrar), border-color .3s var(--entrar); overflow-wrap: anywhere; }
 .pieza.rota { color: var(--mal); border: 1px dashed var(--mal); }
@@ -282,7 +284,9 @@ section.fallas { padding-top: clamp(56px, 9vh, 96px); }
 .prueba-roja code { color: var(--mal); overflow-wrap: anywhere; }
 .prueba-roja__resumen { flex-basis: 100%; font-size: 15px; color: var(--suave); }
 .matriz { margin-top: clamp(48px, 8vh, 80px); border-top: 1px solid var(--linea); padding-top: 8px; }
-@media (max-width: 960px) { .taller { grid-template-columns: minmax(0, 1fr); } .interruptores { position: static; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); } .diagrama { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 960px) { .taller { grid-template-columns: minmax(0, 1fr); } .interruptores { position: static; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); } } 
+/* Seis piezas en fila solo cuando caben sus nombres enteros */
+@media (max-width: 1100px) { .diagrama { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (max-width: 480px) { .diagrama { grid-template-columns: repeat(2, minmax(0, 1fr)); border-width: 8px; } .pieza { font-size: 13px; } }
 @media (max-width: 560px) { .comparar { grid-template-columns: minmax(0, 1fr); } }
 

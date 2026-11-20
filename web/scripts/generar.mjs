@@ -23,7 +23,9 @@ const ACCIONES = REPO + '/actions/workflows/ci.yml';
 const CUADRE = 'https://christopher-sdk.github.io/cuadre/';
 const PORTAFOLIO = 'https://christopher-arias-qa.netlify.app/';
 
-const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+  // Un monto no se parte entre líneas: «S/ 2 540,75» va junto
+  .replace(/S\/ (?=\d)/g, 'S/\u00a0').replace(/(\d) (?=\d{3}(?:\D|$))/g, '$1\u00a0');
 const fecha = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
 const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios || uno + 's'}`;
 const L = MATRIZ.limpio.total;
@@ -386,7 +388,7 @@ function inicio() {
           <p class="prueba-roja"><span class="x" aria-hidden="true">✗</span> <code>${esc(f.primera.prueba)}</code><span class="prueba-roja__resumen">${plural(f.pruebas_fallan, 'prueba falla', 'pruebas fallan')} · ${esc(f.capas.join(', '))}</span></p>
           <a class="boton boton--texto" href="${B}falla/${f.slug}/" data-viaja>Ver la falla ${f.n} <span aria-hidden="true">→</span></a>
         </article>`).join('')}
-        <svg class="hilo" aria-hidden="true"><path /></svg>
+        <svg class="hilo" aria-hidden="true"><path class="hilo__borde" /><path /></svg>
       </div>
     </div>
     <div class="matriz" id="matriz">
