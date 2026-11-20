@@ -4,6 +4,7 @@ Uso: uv run --project .. --with pillow python qa/spec.py [http://127.0.0.1:4912/
 Cada comprobación imprime PASS/FAIL con su evidencia; sale con código 1 si alguna falla.
 """
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -69,7 +70,11 @@ with sync_playwright() as p:
     for i, c in enumerate(CHIPS):
         pc.locator(f'.chip[data-chip="{i}"]').click()
         texto = pc.locator('[data-salida] .veredicto__texto')
-        expect(texto).to_have_text(c['texto'], timeout=3000)
+        # El reclamo lleva el código y la fecha límite del día en que se generaron los datos: contra el sitio publicado
+        # (datos de la CI) pueden ser de otro día, así que esas dos piezas se comparan por forma, no por valor
+        patron = re.sub(r'RCL\\-\d{8}\\-', r'RCL\\-\\d{8}\\-', re.escape(c['texto']))
+        patron = re.sub(r'\d{2}/\d{2}/\d{4}', r'\\d{2}/\\d{2}/\\d{4}', patron)
+        expect(texto).to_have_text(re.compile(f'^{patron}$'), timeout=3000)
         presionado = pc.locator(f'.chip[data-chip="{i}"]').get_attribute('aria-pressed')
         check(f'chip «{c["rotulo"]}» → {c["tipo"]} ({c["capa"]})', presionado == 'true', '')
     # lámparas: un ataque frena en la guardia; una tarifa pasa la guardia y decide en la ruta
